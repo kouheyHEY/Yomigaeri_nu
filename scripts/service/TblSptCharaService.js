@@ -4,7 +4,7 @@
 class TblSptCharaService extends BaseService {
     /**
      * 味方キャラの表示ステータスのリストを取得する
-     * @param {TblSptCharaModel} model 味方キャラモデル
+     * @param {DataModel} model 味方キャラモデル
      * @param {number} width 表示幅
      * @param scene 表示シーン
      * @returns {string[]} 表示するパラメータのリスト
@@ -33,7 +33,7 @@ class TblSptCharaService extends BaseService {
 
     /**
      * 味方キャラの表示ステータスのリストを取得する
-     * @param {TblSptCharaModel} model 味方キャラモデル
+     * @param {DataModel} model 味方キャラモデル
      * @param {number} width 表示幅
      * @param scene 表示シーン
      * @returns {string[]} 表示するパラメータのリスト

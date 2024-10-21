@@ -8,8 +8,6 @@ class BattleScene extends BaseScene {
      * 画面更新用メソッド
      */
     update() {
-        // フッターの更新
-        this.footerManager.updateFooter();
 
         // if (this.footerManager.isEffect) {
         //     // ターゲットに効果を適用する
@@ -37,48 +35,21 @@ class BattleScene extends BaseScene {
      * this.XXXはここに記載
      */
     initInstVal() {
-        // カーソルウインドウに表示する文
-        this.cursorText = null;
+        /** @type {DBManager} */
+        this.dbManager = new DBManager(this);
+        /* 必要なテーブルをロード */
+        this.dbManager.loadTabData(C_DB.TABLE_NAME.T_SPT_CHARA);
+        this.dbManager.loadTabData(C_DB.TABLE_NAME.T_ENEMY);
+        this.dbManager.loadTabData(C_DB.TABLE_NAME.M_MENU);
+        /** @type {SptCharaManager} */
+        this.sptCharaManager = new SptCharaManager(this);
+        /** @type {EnemyManager} */
+        this.enemyManager = new EnemyManager(this);
+        /** @type {MenuManager} */
+        this.menuManager = new MenuManager(this);
+        /** @type {DispManager} */
+        this.dispManager = new DispManager(this);
 
-        /** @type {TextWindow} キャラ１のステータスウインドウ */
-        this.windowChara1Stt = null;
-        /** @type {TextWindow} キャラ２のステータスウインドウ */
-        this.windowChara2Stt = null;
-
-        // 各Daoの取得
-        /** @type {MstMenuDao} メニューマスタDao */
-        this.mstMenuDao = new MstMenuDao(this);
-        /** @type {MstActionDao} アクションマスタDao */
-        this.mstActionDao = new MstActionDao(this);
-        /** @type {MstFieldDao} フィールドマスタDao */
-        this.mstFieldDao = new MstFieldDao(this);
-        /** @type {TblItemDao} アイテムテーブルDao */
-        this.tblItemDao = new TblItemDao(this);
-        /** @type {TblSptCharaDao} 味方キャラテーブルDao */
-        this.tblSptCharaDao = new TblSptCharaDao(this);
-        /** @type {TblActionDao} アクションテーブルDao */
-        this.tblActionDao = new TblActionDao(this);
-        /** @type {TblEnemyDao} 敵テーブルDao */
-        this.tblEnemyDao = new TblEnemyDao(this);
-
-        // キャラの管理用マネージャの生成
-        /** @type {CharaManager} キャラマネージャ */
-        this.charaManager = new CharaManager(this);
-
-        // キャラのステータスなどを表示するかどうかのフラグ
-        this.isDispChara1 = this.charaManager.isCharaExist(C_DB.T_SPT_CHARA.ID_SPRT1);
-        this.isDispChara2 = this.charaManager.isCharaExist(C_DB.T_SPT_CHARA.ID_SPRT2);
-
-        /** @type {FooterManager} フッターマネージャ */
-        this.footerManager = null;
-
-        /* キャラ1の行動内容 */
-        this.chara1ActionObj = null;
-        /* キャラ2の行動内容 */
-        this.chara2ActionObj = null;
-
-        /* フィールド */
-        this.fieldId = this.param.fieldId;
     }
 
     /** 画面上の各オブジェクトを表示する
@@ -87,12 +58,12 @@ class BattleScene extends BaseScene {
     initArea() {
 
         // 背景色の設定
-        this.cameras.main.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
+        this.dispManager.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
 
-        if (this.isDispChara1) {
+        if (this.sptCharaManager.isCharaExist(C_DB.T_SPT_CHARA.ID_SPRT1)) {
             // キャラ１が存在する場合
             // キャラ１のステータスウインドウを描画
-            this.windowChara1Stt = new TextWindow({
+            const windowChara1Stt = new TextWindow({
                 startX: C_BS.WINDOW_CHARA1_STATUS_X,
                 startY: C_BS.WINDOW_CHARA1_STATUS_Y,
                 hSize: C_BS.WINDOW_CHARA1_STATUS_W,
@@ -100,16 +71,19 @@ class BattleScene extends BaseScene {
                 fontSize: C_COMMON.FONT_SIZE_SMALL,
                 menuColNum: 1,
             }, this);
+
             // ウインドウを描画 
-            this.windowChara1Stt.drawWindow();
+            windowChara1Stt.drawWindow();
+            // ウインドウをマネージャに追加
+            this.dispManager.addNewWindow(windowChara1Stt);
             // キャラ１のステータスを更新
             this.updateCharaStt(C_DB.T_SPT_CHARA.ID_SPRT1);
         }
 
-        if (this.isDispChara2) {
+        if (this.sptCharaManager.isCharaExist(C_DB.T_SPT_CHARA.ID_SPRT2)) {
             // キャラ２が存在する場合
             // キャラ２のステータスウインドウを描画
-            this.windowChara2Stt = new TextWindow({
+            const windowChara2Stt = new TextWindow({
                 startX: C_BS.WINDOW_CHARA2_STATUS_X,
                 startY: C_BS.WINDOW_CHARA2_STATUS_Y,
                 hSize: C_BS.WINDOW_CHARA2_STATUS_W,
@@ -118,13 +92,62 @@ class BattleScene extends BaseScene {
                 menuColNum: 1,
             }, this);
             // ウインドウを描画
-            this.windowChara2Stt.drawWindow();
+            windowChara2Stt.drawWindow();
+            // ウインドウをマネージャに追加
+            this.dispManager.addNewWindow(windowChara2Stt);
             // キャラ２のステータスを更新
             this.updateCharaStt(C_DB.T_SPT_CHARA.ID_SPRT2);
         }
 
-        // フッターの生成
-        this.footerManager = new FooterManager(this, this.param);
+
+        /** @type {TextWindow} 画面左下のメニューウインドウ */
+        const windowMenu = new TextWindow({
+            startX: C_COMMON.WINDOW_MENU_X,
+            startY: C_COMMON.WINDOW_MENU_Y,
+            hSize: C_COMMON.WINDOW_MENU_W,
+            vSize: C_COMMON.WINDOW_MENU_H,
+            menuColNum: 1,
+            fontSize: C_COMMON.FONT_SIZE_SMALL,
+            isLine: false, isList: true, isMenu: true
+        }, this);
+        windowMenu.drawWindow();
+
+        /** @type {DispContent} メニューウインドウの表示コンテンツ */
+        const dispCttMenu = new DispContent(true, false, true, C_COMMON.WINDOW_CONTENT_TYPE_MENU, this);
+
+        // コンテンツを設定
+        dispCttMenu.addContentList(this.dbManager.selectByMenuId(C_DB.TABLE_NAME.M_MENU, C_DB.M_MENU.MENUID_BATTLESCENE));
+        windowMenu.setDispContent(dispCttMenu);
+
+        // マネージャに追加
+        this.dispManager.addNewWindow(windowMenu);
+
+        /** @type {TextWindow} 画面下のメインウインドウ */
+        const windowTextMain = new TextWindow({
+            startX: C_COMMON.WINDOW_TEXT_MAIN_X,
+            startY: C_COMMON.WINDOW_TEXT_MAIN_Y,
+            hSize: C_COMMON.WINDOW_TEXT_MAIN_W,
+            vSize: C_COMMON.WINDOW_TEXT_MAIN_H,
+            menuCol: 1,
+            fontSize: C_COMMON.FONT_SIZE_SMALL,
+            isLine: true, isList: false, isMenu: false
+        }, this);
+        windowTextMain.drawWindow();
+
+        /** @type {DispContent} メインウインドウの表示コンテンツ */
+        const dispCttMain = new DispContent(true, false, true, C_COMMON.WINDOW_CONTENT_TYPE_MENU, this);
+
+        // コンテンツを設定
+        const dispCttTextMain = new DispContent(false, true, false, C_COMMON.WINDOW_CONTENT_TYPE_LINE, this);
+        dispCttTextMain.addContent("テスト文字列です。");
+        windowTextMain.setDispContent(dispCttTextMain);
+
+        // 初期にアクティブにするウインドウの設定
+        windowMenu.isActive = true;
+
+        // マネージャに追加
+        this.dispManager.addNewWindow(windowTextMain);
+
 
         console.log('[BattleScene.initArea]START BattleScene');
     }
@@ -136,23 +159,27 @@ class BattleScene extends BaseScene {
     updateCharaStt(charaIdx) {
         /** @type {TextWindow} */
         let window = null;
+        /** @type {DataModel} */
         let charaModel = null;
 
         if (charaIdx === C_DB.T_SPT_CHARA.ID_SPRT1) {
             // キャラ１の場合
-            window = this.windowChara1Stt;
-            charaModel = this.charaManager.getCharacter(C_DB.T_SPT_CHARA.ID_SPRT1);
+            window = this.dispManager.getWindow(C_BS.KEY_WINDOW_CHARA1_STATUS);
+            charaModel = this.sptCharaManager.getCharacter(C_DB.T_SPT_CHARA.ID_SPRT1);
         } else if (charaIdx === C_DB.T_SPT_CHARA.ID_SPRT2) {
             // キャラ２の場合
-            window = this.windowChara2Stt;
-            charaModel = this.charaManager.getCharacter(C_DB.T_SPT_CHARA.ID_SPRT2);
+            window = this.dispManager.getWindow(C_BS.KEY_WINDOW_CHARA2_STATUS);
+            charaModel = this.sptCharaManager.getCharacter(C_DB.T_SPT_CHARA.ID_SPRT2);
         }
 
         if (window != null && charaModel != null) {
             // ウインドウに表示コンテンツをセット
+            /** @type {DispContent} */
             const dispCtt = new DispContent(true, false, false, C_COMMON.WINDOW_CONTENT_TYPE_TEXTLIST, this);
             dispCtt.addContentList(TblSptCharaService.getBattleDispProps(charaModel, window.hSize, this));
             window.setDispContent(dispCtt);
+            // ウインドウを更新
+            this.dispManager.addNewWindow(C_BS.KEY_WINDOW_CHARA1_STATUS, window, true);
         }
         console.log('[BattleScene.updateCharaStt]END updateCharaStt');
     }

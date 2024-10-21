@@ -8,8 +8,7 @@
                 "scripts/const/TSConst.js",
                 "scripts/const/ISConst.js",
                 "scripts/const/BSConst.js",
-                "scripts/const/DBConst.js",
-                "scripts/const/ClassConst.js"
+                "scripts/const/DBConst.js"
             ]
         },
         {
@@ -24,17 +23,7 @@
         {
             "category": "モデル",
             "files": [
-                "scripts/model/BaseModel.js",
-                "scripts/model/MstActionModel.js",
-                "scripts/model/MstEnemyModel.js",
-                "scripts/model/MstFieldModel.js",
-                "scripts/model/MstItemModel.js",
-                "scripts/model/MstMenuModel.js",
-                "scripts/model/MstTextModel.js",
-                "scripts/model/TblEnemyModel.js",
-                "scripts/model/TblItemModel.js",
-                "scripts/model/TblSptCharaModel.js",
-                "scripts/model/TblActionModel.js"
+                "scripts/model/DataModel.js"
             ]
         },
         {
@@ -77,10 +66,13 @@
         {
             "category": "マネージャクラス",
             "files": [
-                "scripts/manager/GameDataManager.js",
+                "scripts/manager/DBManager.js",
                 "scripts/manager/InputManager.js",
-                "scripts/manager/FooterManager.js",
-                "scripts/manager/CharaManager.js"
+                "scripts/manager/SptCharaManager.js",
+                "scripts/manager/DispManager.js",
+                "scripts/manager/ActionManager.js",
+                "scripts/manager/EnemyManager.js",
+                "scripts/manager/MenuManager.js"
             ]
         },
         {

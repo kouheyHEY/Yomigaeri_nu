@@ -4,14 +4,15 @@ class TitleScene extends BaseScene {
     }
 
     initInstVal() {
-        // 各Daoの取得
-        this.mstMenuDao = new MstMenuDao(this);
+        /** @type {DBManager} */
+        this.dbManager = new DBManager(this);
+        /** @type {MenuManager} */
+        this.menuManager = new MenuManager(this);
+        /** @type {DispManager} */
+        this.dispManager = new DispManager(this);
 
         /** タイトルテキスト */
         this.titleText = null;
-
-        /** @type {MstMenuModel[]} タイトルメニュー メニューモデルリスト */
-        this.menuList = this.mstMenuDao.getByMenuId(C_DB.M_MENU.MENUID_TITLE);
 
         /** タイトルメニュー はじめから */
         this.menuStart = null;
@@ -27,7 +28,7 @@ class TitleScene extends BaseScene {
     initArea() {
 
         // 背景色の設定
-        this.cameras.main.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
+        this.dispManager.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
 
         // タイトルを表示
         this.titleText = this.add.text(C_TS.TITLE_X, C_TS.TITLE_Y, C_COMMON.GAME_TITLE,
@@ -47,7 +48,7 @@ class TitleScene extends BaseScene {
 
         /* はじめから */
         this.menuStart = this.add.text(
-            getMenuX(0), getMenuY(0), this.menuList[0].colName,
+            getMenuX(0), getMenuY(0), C_TS.MENU_TEXT_START,
             {
                 fontSize: C_COMMON.FONT_SIZE_MEDIAM,
                 fill: C_COMMON.COMMON_COLOR_WINDOW_FONT,
@@ -56,7 +57,7 @@ class TitleScene extends BaseScene {
 
         /* つづきから */
         this.menuContinue = this.add.text(
-            getMenuX(1), getMenuY(1), this.menuList[1].colName,
+            getMenuX(1), getMenuY(1), C_TS.MENU_TEXT_CONTINUE,
             {
                 fontSize: C_COMMON.FONT_SIZE_MEDIAM,
                 fill: C_COMMON.COMMON_COLOR_WINDOW_FONT,
@@ -65,7 +66,7 @@ class TitleScene extends BaseScene {
 
         /* クレジット */
         this.menuCredit = this.add.text(
-            getMenuX(2), getMenuY(2), this.menuList[2].colName,
+            getMenuX(2), getMenuY(2), C_TS.MENU_TEXT_CREDIT,
             {
                 fontSize: C_COMMON.FONT_SIZE_MEDIAM,
                 fill: C_COMMON.COMMON_COLOR_WINDOW_FONT,
@@ -74,7 +75,7 @@ class TitleScene extends BaseScene {
 
         /* おわる */
         this.menuEnd = this.add.text(
-            getMenuX(3), getMenuY(3), this.menuList[3].colName,
+            getMenuX(3), getMenuY(3), C_TS.MENU_TEXT_END,
             {
                 fontSize: C_COMMON.FONT_SIZE_MEDIAM,
                 fill: C_COMMON.COMMON_COLOR_WINDOW_FONT,
@@ -88,7 +89,7 @@ class TitleScene extends BaseScene {
 
         // つづきから押下時
         this.menuContinue.on('pointerdown', () => {
-            this.scene.start(C_COMMON.SCENE_IKUSEISCENE);
+            this.scene.start(C_COMMON.SCENE_BATTLESCENE);
         });
 
         // クレジット押下時

@@ -27,4 +27,21 @@ const C_TS = {
     /** メニュー項目 高さ */
     MENU_HEIGHT: 48,
 
+    /** メニュー項目 初めからのID */
+    MENU_ID_START: 0,
+    /** メニュー項目 続きからのID */
+    MENU_ID_CONTINUE: 1,
+    /** メニュー項目 クレジットのID */
+    MENU_ID_CREDIT: 2,
+    /** メニュー項目 終了のID */
+    MENU_ID_END: 3,
+
+    /** メニュー項目 初めからのテキスト */
+    MENU_TEXT_START: "はじめから",
+    /** メニュー項目 続きからのテキスト */
+    MENU_TEXT_CONTINUE: "つづきから",
+    /** メニュー項目 クレジットのテキスト */
+    MENU_TEXT_CREDIT: "クレジット",
+    /** メニュー項目 終了のテキスト */
+    MENU_TEXT_END: "おわり",
 }

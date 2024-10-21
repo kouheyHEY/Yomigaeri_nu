@@ -21,16 +21,12 @@ class PreLoadScene extends Phaser.Scene {
     }
 
     async create() {
-        // データを保持するデータマネージャ
-        const gameDataManager = new GameDataManager();
-
         // JSONデータを読み込み、GameDataManagerとレジストリにセットする関数
         const loadTableData = async (tableName, fileName) => {
             try {
                 const jsonData = await window.electronAPI.readCSV(`${C_ASSET.FILEPATH_DB}/${fileName}`);
                 if (jsonData) {
-                    gameDataManager.setTableData(tableName, jsonData);
-                    this.registry.set(tableName, gameDataManager.getTableData(tableName));
+                    this.registry.set(tableName, jsonData);
                 }
             } catch {
                 console.error(`Failed to load data for ${tableName}`);

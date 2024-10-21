@@ -43,4 +43,11 @@ const C_BS = {
     WINDOW_TEXT_MAIN_W: 832,
     /** メイン用テキストウインドウ 高さ */
     WINDOW_TEXT_MAIN_H: 192,
+
+    /** バトルシーンの各ウインドウのキー */
+    KEY_WINDOW_CHARA1_STATUS: "windowChara1Status",
+    KEY_WINDOW_CHARA2_STATUS: "windowChara2Status",
+    KEY_WINDOW_FIELD_STATUS: "windowFieldStatus",
+    KEY_WINDOW_MENU: "windowMenu",
+    KEY_WINDOW_TEXT_MAIN: "windowTextMain",
 }

@@ -1,3 +1,7 @@
+/**
+ * ウインドウに表示する内容のエンティティ
+ * 表示内容のアーカイブ、復元、子メニューの取得、選択肢の設定を行う
+ */
 class DispContent {
 
     /**
@@ -128,16 +132,16 @@ class DispContent {
      * @private
      */
     getDisplayInfo(obj) {
+        console.log(obj);
         if (typeof obj === 'string') {
             return { dispStr: obj, expl: '' };
-        } else if (obj instanceof BaseModel) {
-            if (obj instanceof MstMenuModel) {
+        } else {
+            if (obj.tabName !== undefined && obj.tabName == C_DB.TABLE_NAME.M_MENU) {
                 return { dispStr: obj.colName, expl: obj.expl };
             } else {
                 return { dispStr: obj.name, expl: obj.expl };
             }
         }
-        return { dispStr: '', expl: '' };
     }
 
     /**
@@ -271,7 +275,7 @@ class DispContent {
 
     /**
      * 履歴から効果反映対象を取得
-     * @returns {BaseModel} 効果反映オブジェクト
+     * @returns {DataModel} 効果反映オブジェクト
      */
     getEffectObj() {
         if (this.dispContentObjHist.length == 0) {

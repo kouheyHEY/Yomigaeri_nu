@@ -96,4 +96,11 @@ class CursorWindow {
             this.windowContainer.add(this.dispTextObj);
         }
     }
+
+    /**
+     * ウインドウを最前面に表示する
+     */
+    bringToTop() {
+        this.windowContainer.setDepth(100);
+    }
 }

@@ -8,26 +8,8 @@ class BattleScene extends BaseScene {
      * 画面更新用メソッド
      */
     update() {
+        this.dispManager.update();
 
-        // if (this.footerManager.isEffect) {
-        //     // ターゲットに効果を適用する
-        //     this.charaManager.applyEffect(this.footerManager.effectParam.targetId, this.footerManager.effectParam.effect, this.footerManager.effectParam.type);
-        //     // 効果適用フラグを無効にする
-        //     this.footerManager.isEffect = false;
-        //     // キャラクターのステータス表示を更新
-        //     this.updateCharaStt(this.footerManager.effectParam.targetId);
-        // }
-
-        // if (this.footerManager.isReadyNextScene) {
-        //     // 遷移準備ができている場合
-        //     // キャラクターのステータスを更新
-        //     this.charaManager.updateAllCharacter();
-        //     // 次のシーンへ遷移
-        //     this.scene.start(
-        //         this.footerManager.nextSceneParam.scene,
-        //         this.footerManager.nextSceneParam.param
-        //     );
-        // }
     }
 
     /**
@@ -75,7 +57,7 @@ class BattleScene extends BaseScene {
             // ウインドウを描画 
             windowChara1Stt.drawWindow();
             // ウインドウをマネージャに追加
-            this.dispManager.addNewWindow(windowChara1Stt);
+            this.dispManager.addNewWindow(C_BS.KEY_WINDOW_CHARA1_STATUS, windowChara1Stt, true);
             // キャラ１のステータスを更新
             this.updateCharaStt(C_DB.T_SPT_CHARA.ID_SPRT1);
         }
@@ -94,7 +76,7 @@ class BattleScene extends BaseScene {
             // ウインドウを描画
             windowChara2Stt.drawWindow();
             // ウインドウをマネージャに追加
-            this.dispManager.addNewWindow(windowChara2Stt);
+            this.dispManager.addNewWindow(C_BS.KEY_WINDOW_CHARA2_STATUS, windowChara2Stt, true);
             // キャラ２のステータスを更新
             this.updateCharaStt(C_DB.T_SPT_CHARA.ID_SPRT2);
         }
@@ -120,7 +102,7 @@ class BattleScene extends BaseScene {
         windowMenu.setDispContent(dispCttMenu);
 
         // マネージャに追加
-        this.dispManager.addNewWindow(windowMenu);
+        this.dispManager.addNewWindow(C_BS.KEY_WINDOW_MENU, windowMenu, true);
 
         /** @type {TextWindow} 画面下のメインウインドウ */
         const windowTextMain = new TextWindow({
@@ -135,9 +117,6 @@ class BattleScene extends BaseScene {
         windowTextMain.drawWindow();
 
         /** @type {DispContent} メインウインドウの表示コンテンツ */
-        const dispCttMain = new DispContent(true, false, true, C_COMMON.WINDOW_CONTENT_TYPE_MENU, this);
-
-        // コンテンツを設定
         const dispCttTextMain = new DispContent(false, true, false, C_COMMON.WINDOW_CONTENT_TYPE_LINE, this);
         dispCttTextMain.addContent("テスト文字列です。");
         windowTextMain.setDispContent(dispCttTextMain);
@@ -146,7 +125,7 @@ class BattleScene extends BaseScene {
         windowMenu.isActive = true;
 
         // マネージャに追加
-        this.dispManager.addNewWindow(windowTextMain);
+        this.dispManager.addNewWindow(C_BS.KEY_WINDOW_TEXT_MAIN, windowTextMain, true);
 
 
         console.log('[BattleScene.initArea]START BattleScene');

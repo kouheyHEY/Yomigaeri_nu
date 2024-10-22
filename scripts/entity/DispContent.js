@@ -26,9 +26,7 @@ class DispContent {
      * @param {Phaser.Scene} scene 使用シーン
      */
     constructor(isList, isLine, isMenu, type, scene) {
-
-        /** @type {DispContentObj[]} 表示コンテンツの履歴 */
-        this.dispContentObjHist = [];
+        this.history = new ContentHistory();
 
         /** @type {DispContentObj} */
         this.dispContentObj = {
@@ -50,7 +48,7 @@ class DispContent {
     get expl() { return this.dispContentObj.expl; }
     set expl(value) { this.dispContentObj.expl = value; }
 
-    /** @type {obect[]} */
+    /** @type {object[]} */
     get obj() { return this.dispContentObj.obj; }
     set obj(value) { this.dispContentObj.obj = value; }
 
@@ -87,52 +85,22 @@ class DispContent {
     }
 
     /**
-     * 表示コンテンツを表すオブジェクトを作成する
-     * @param {number} objType 表示オブジェクトのタイプ
-     * @param {object[]} objList 表示オブジェクトのリスト
-     * @param {boolean} isList リスト形式か
-     * @param {boolean} isLine 文章形式か
-     * @param {boolean} isMenu 選択可能形式か
-     * @returns {DispContentObj} 表示コンテンツのオブジェクト
-     */
-    createContentObj(objType, objList, isList, isLine, isMenu) {
-        const contentObj = {
-            expl: [],
-            obj: objList,
-            dispObjType: objType,
-            dispStr: [],
-            isList: isList,
-            isLine: isLine,
-            isMenu: isMenu,
-        };
-
-        for (const obj of objList) {
-            const { dispStr, expl } = this.getDisplayInfo(obj);
-            contentObj.dispStr.push(dispStr);
-            contentObj.expl.push(expl);
-        }
-        return contentObj;
-    }
-
-    /**
-     * 表示対象オブジェクトを追加する
+     * 表示対象オブジェクトのリストを追加する
      * @param {object[]} dispObjList 表示対象のオブジェクトのリスト
      */
     addContentList(dispObjList) {
-        if (this.dispContentObj.obj.length !== 0) {
-            throw new Error('[DispContent.addContentList]既に表示コンテンツが設定済みです。');
-        }
-        dispObjList.forEach(dispObj => this.addContent(dispObj));
+        dispObjList.forEach(dispObj => {
+            this.addContent(dispObj);
+        });
     }
 
     /**
-     * オブジェクトから表示情報を取得する
+     * 表示情報を取得する
      * @param {object} obj 表示対象のオブジェクト
      * @returns {{dispStr: string, expl: string}} 表示文字列と説明文
      * @private
      */
     getDisplayInfo(obj) {
-        console.log(obj);
         if (typeof obj === 'string') {
             return { dispStr: obj, expl: '' };
         } else {
@@ -145,124 +113,20 @@ class DispContent {
     }
 
     /**
-     * 表示コンテンツの表示種類をセットする
-     * @param {boolean} isList リストかどうか
-     * @param {boolean} isLine 文章かどうか
-     * @param {boolean} isMenu 選択可能かどうか
-     */
-    setDispType(isList, isLine, isMenu) {
-        Object.assign(this.dispContentObj, { isList, isLine, isMenu });
-    }
-
-    /**
-     * 表示オブジェクトのタイプをセットする
-     * @param {number} type 表示オブジェクトのタイプ
-     */
-    setObjType(type) {
-        this.dispContentObj.dispObjType = type;
-    }
-
-    /** 
      * 表示内容を履歴に保存する
      * @param {number} index 選択した要素
-     * @param {boolean} isReset 履歴を保存後、現在の表示を削除するかどうか
      */
-    archiveContent(index, isReset) {
-        // 選択した要素を保存する
+    archiveContent(index) {
         this.dispContentObj.choosedIdx = index;
-        // オブジェクトをディープコピーする
-        const copyObj = ObjectUtil.deepCopy(this.dispContentObj);
-        // オブジェクトを履歴に保存する
-        this.dispContentObjHist.push(copyObj);
-        if (isReset) {
-            // 現在の値をリセットする
-            this.initContent();
-        }
+        this.history.add(ObjectUtil.deepCopy(this.dispContentObj));
     }
 
     /** 表示内容を履歴から復元する */
     restoreContent() {
-        // 履歴がない場合はエラー
-        if (this.dispContentObjHist.length == 0) {
+        if (this.history.isEmpty()) {
             throw new Error('[DispContent.restoreContent]履歴がありません。');
         }
-        // 履歴から復元対象を取得し、セット
-        Object.assign(this.dispContentObj, this.dispContentObjHist.pop());
-    }
-
-    /**
-     * 指定したインデックスの要素の子メニューがあれば取得する。
-     * 子メニューがない場合（指定した要素がキャラリスト、敵キャラリストなどだった場合）は1を返す
-     * @param {number} idx 子メニューを取得する要素のインデックス番号
-     * @returns {DispContentObj} 子メニューのオブジェクト、遷移先メニュー無し（戻る押下）の場合は-1、そうでない場合は1
-     */
-    getChildContent(idx) {
-        if (idx < 0 || idx >= this.dispContentObj.obj.length) {
-            throw new Error('[DispContent.getChildContent]インデックスが不正です。');
-        }
-
-        // 子メニューを取得する要素
-        const choosedCtt = this.dispContentObj.obj[idx];
-        // 現在の表示コンテンツのタイプ
-        const type = this.dispContentObj.dispObjType;
-        /** @type {DispContentObj} 取得する子メニュー */
-        let childObj = null;
-
-        if (choosedCtt == C_COMMON.WINDOW_MENU_BACK) {
-            // 戻る選択肢の場合
-            if (this.dispContentObjHist.length == 0) {
-                // 履歴がない場合は-1を返す
-                childObj = C_COMMON.CHILDMENU_NULL_BACK;
-            } else {
-                // 履歴がある場合は履歴のオブジェクトを返す
-                childObj = ObjectUtil.deepCopy(this.dispContentObjHist[idx]);
-            }
-            return childObj;
-
-        } else if (
-            type == C_COMMON.WINDOW_CONTENT_TYPE_CHARA ||
-            type == C_COMMON.WINDOW_CONTENT_TYPE_FIELD
-        ) {
-            // 次の選択肢がない場合は1を返す
-            childObj = C_COMMON.CHILDMENU_NULL_NEXT;
-            return childObj;
-
-        } else if (type == C_COMMON.WINDOW_CONTENT_TYPE_LINE) {
-            // 文章だった場合はエラー
-            throw new Error(
-                '[DispContent.getChildContent]文章コンテンツの子メニューは取得できません。');
-        } else if (type == C_COMMON.WINDOW_CONTENT_TYPE_TEXTLIST) {
-            // 現在の表示がテキストリスト形式の場合、エラー
-            throw new Error(
-                '[DispContent.getChildContent]テキストリストは子メニューを取得できません。');
-        }
-
-        const childObjBase = DataIOUtil.getChildCtt(
-            { obj: choosedCtt, type: type }, this.scene, true
-        );
-
-        childObj = this.createContentObj(childObjBase.type, childObjBase.obj, true, false, true);
-
-        return childObj;
-    }
-
-    /**
-     * 子メニューを取得し、そのまま設定する
-     * @param {number} idx 子メニューを取得するメニューのインデックス
-     */
-    setChildContent(idx) {
-        // 履歴を保存する
-        this.archiveContent(idx, false);
-        /** @type {DispContentObj} */
-        this.dispContentObj = ObjectUtil.deepCopy(this.getChildContent(idx));
-    }
-    /** コンテンツを初期化 */
-    initContent() {
-        this.dispContentObj = {
-            expl: [], obj: [], dispStr: [],
-            dispObjType: C_COMMON.WINDOW_CONTENT_TYPE_LINE,
-            isList: false, isLine: true, isMenu: false
-        };
+        Object.assign(this.dispContentObj, this.history.restore());
     }
 
     /**
@@ -271,17 +135,5 @@ class DispContent {
      */
     getContentLength() {
         return this.dispContentObj.obj.length;
-    }
-
-    /**
-     * 履歴から効果反映対象を取得
-     * @returns {DataModel} 効果反映オブジェクト
-     */
-    getEffectObj() {
-        if (this.dispContentObjHist.length == 0) {
-            throw new Error('[DispContent.getEffectObj]履歴がありません。');
-        }
-        const lastHist = this.dispContentObjHist.at(-1);
-        return lastHist.obj[lastHist.choosedIdx];
     }
 }

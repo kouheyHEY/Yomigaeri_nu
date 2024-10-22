@@ -52,7 +52,8 @@
         {
             "category": "エンティティ",
             "files": [
-                "scripts/entity/DispContent.js"
+                "scripts/entity/DispContent.js",
+                "scripts/entity/ContentHistory.js"
             ]
         },
         {

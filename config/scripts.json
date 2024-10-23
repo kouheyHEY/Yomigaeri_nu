@@ -4,86 +4,31 @@
             "category": "定数クラス",
             "files": [
                 "scripts/const/CommonConst.js",
-                "scripts/const/AssetConst.js",
                 "scripts/const/TSConst.js",
                 "scripts/const/ISConst.js",
-                "scripts/const/BSConst.js",
-                "scripts/const/DBConst.js"
+                "scripts/const/MenuConst.js"
             ]
         },
         {
-            "category": "ユーティルクラス",
+            "category": "スプライトクラス",
             "files": [
-                "scripts/util/GraphicUtil.js",
-                "scripts/util/ObjectUtil.js",
-                "scripts/util/EffectUtil.js",
-                "scripts/util/DataIOUtil.js"
-            ]
-        },
-        {
-            "category": "モデル",
-            "files": [
-                "scripts/model/DataModel.js"
-            ]
-        },
-        {
-            "category": "daoクラス",
-            "files": [
-                "scripts/dao/BaseDao.js",
-                "scripts/dao/MstActionDao.js",
-                "scripts/dao/MstEnemyDao.js",
-                "scripts/dao/MstFieldDao.js",
-                "scripts/dao/MstItemDao.js",
-                "scripts/dao/MstMenuDao.js",
-                "scripts/dao/MstTextDao.js",
-                "scripts/dao/TblEnemyDao.js",
-                "scripts/dao/TblItemDao.js",
-                "scripts/dao/TblSptCharaDao.js",
-                "scripts/dao/TblActionDao.js"
-            ]
-        },
-        {
-            "category": "スプライト",
-            "files": [
-                "scripts/sprite/TextWindow.js",
-                "scripts/sprite/CursorWindow.js"
-            ]
-        },
-        {
-            "category": "エンティティ",
-            "files": [
-                "scripts/entity/DispContent.js",
-                "scripts/entity/ContentHistory.js"
-            ]
-        },
-        {
-            "category": "サービスクラス",
-            "files": [
-                "scripts/service/BaseService.js",
-                "scripts/service/TblSptCharaService.js",
-                "scripts/service/MstFieldService.js"
-            ]
-        },
-        {
-            "category": "マネージャクラス",
-            "files": [
-                "scripts/manager/DBManager.js",
-                "scripts/manager/InputManager.js",
-                "scripts/manager/SptCharaManager.js",
-                "scripts/manager/DispManager.js",
-                "scripts/manager/ActionManager.js",
-                "scripts/manager/EnemyManager.js",
-                "scripts/manager/MenuManager.js"
+                "scripts/sprite/TextWindow.js"
             ]
         },
         {
             "category": "シーンクラス",
             "files": [
-                "scripts/scene/BaseScene.js",
                 "scripts/scene/PreLoadScene.js",
                 "scripts/scene/TitleScene.js",
-                "scripts/scene/IkuseiScene.js",
-                "scripts/scene/BattleScene.js"
+                "scripts/scene/IkuseiScene.js"
+            ]
+        },
+        {
+            "category": "ユーティリティクラス",
+            "files": [
+                "scripts/util/ObjectUtil.js",
+                "scripts/util/TextUtil.js",
+                "scripts/util/CommonUtil.js"
             ]
         },
         {

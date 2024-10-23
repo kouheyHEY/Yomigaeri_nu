@@ -1,278 +1,130 @@
 class TextWindow {
-
-    /**
-     * ウインドウを作成する
-     * @param {object} config ウインドウの設定
-     * @param {number} config.startX ウインドウの左上のX座標
-     * @param {number} config.startY ウインドウの左上のY座標
-     * @param {number} config.hSize 横のサイズ
-     * @param {number} config.vSize 縦のサイズ
-     * @param {number} config.menuColNum メニューの列数
-     * @param {string} config.frameColor ウインドウの枠の色
-     * @param {string} config.bgColor ウインドウの背景の色
-     * @param {number} config.fontSize フォントサイズ
-     * @param {string} config.fontColor 文字の色
-     * @param {boolean} config.isLine 文章かどうか
-     * @param {boolean} config.isList リストかどうか
-     * @param {boolean} config.isMenu メニューかどうか（選択可能か）
-     * @param {Phaser.Scene} scene ウインドウを作成するシーン
-     */
-    constructor(config, scene) {
+    constructor(scene, x, y, width, height) {
         this.scene = scene;
-        this.startX = config.startX;
-        this.startY = config.startY;
-        this.hSize = config.hSize;
-        this.vSize = config.vSize;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
 
-        this.isLine = config.isLine;
-        this.isList = config.isList;
-        this.isMenu = config.isMenu;
-        this.menuColNum = config.menuColNum || 1;
+        this.dispContentMap = new Map();
 
-        this.frameColor = ('frameColor' in config)
-            ? config.frameColor
-            : C_COMMON.COMMON_COLOR_WINDOW_FRAME;
+        this.windowProperty = {
+            frameWeight: C_COMMON.WINDOW_FRAME_WEIGHT,
+            frameColor: CommonUtil.convertColorCode(C_COMMON.COMMON_COLOR_WINDOW_FRAME),
+            frameRound: C_COMMON.WINDOW_ROUND,
+            bgColor: CommonUtil.convertColorCode(C_COMMON.COMMON_COLOR_WINDOW_BG),
+        };
 
-        this.bgColor = ('bgColor' in config)
-            ? config.bgColor
-            : C_COMMON.COMMON_COLOR_WINDOW_BG;
-
-        this.fontSize = ('fontSize' in config)
-            ? config.fontSize
-            : C_COMMON.FONT_SIZE_SMALL_2;
-
-        this.fontColor = ('fontColor' in config)
-            ? config.fontColor
-            : C_COMMON.COMMON_COLOR_WINDOW_FONT;
-
-        // テキスト間の幅やパディング
-        this.paddingLine = ('paddingLine' in config)
-            ? config.paddingLine
-            : C_COMMON.WINDOW_PADDING_LINE_SMALL;
-
-        // フォントのスタイル
         this.fontStyle = {
-            fontSize: this.fontSize,
+            fontSize: C_COMMON.FONT_SIZE_SMALL,
             fill: C_COMMON.COMMON_COLOR_WINDOW_FONT,
             fontFamily: C_COMMON.FONT_FAMILY_BIT12,
-            lineSpacing: this.paddingLine
         };
 
-        // 実際に表示する文字列オブジェクト
         this.dispTextGroup = this.scene.add.group();
-        // 選択されているメニューの番号
-        this.choosedMenuIdx = 0;
-        this.choosedMark = null;
-        this.pressedMenu = false;
 
-        // 表示内容
-        /** @type {DataModel} */
-        this.pressedObj = null;
-        this.isFocused = false;
-
-        // ウインドウがアクティブかどうか
-        this.isActive = false;
-
-        // ウインドウのオブジェクト
-        this.windowObj = null;
-
-        // ウインドウ関連のオブジェクトのコンテナ
-        this.windowContainer = this.scene.add.container(0, 0);
-
-        /** @type {DispContent} 表示対象のオブジェクト */
-        this.dispObj = null;
+        this.windowContainer = this.scene.add.container(this.x, this.y);
     }
 
     /**
-     * 表示コンテンツを初期化する
+     * ウインドウのプロパティを設定する
+     * @param {Object} property プロパティ
+     * @param {number} property.frameWeight 枠の太さ
+     * @param {number} property.frameColor 枠の色
+     * @param {number} property.frameRound 枠の丸み
+     * @param {number} property.bgColor 背景色
+     * @param {number} property.fontSize 文字の大きさ
+     * @param {number} property.fontColor 文字の色
+     * @param {string} property.fontFamily フォント
      */
-    resetContent() {
-        this.dispContent = null;
-        this.dispType = null;
-        this.pressedMenu = false;
-        this.pressedObj = null;
-        this.isFocused = false;
-        this.dispTextGroup.clear(true, true);
-
-        if (this.choosedMark) {
-            // 既に表示されている場合は、削除する
-            this.choosedMark.destroy();
-        }
+    setProperty(property) {
+        this.windowProperty.frameWeight = property.frameWeight;
+        this.windowProperty.frameColor = CommonUtil.convertColorCode(property.frameColor);
+        this.windowProperty.frameRound = property.frameRound;
+        this.windowProperty.bgColor = CommonUtil.convertColorCode(property.bgColor);
+        this.fontStyle.fontSize = property.fontSize;
+        this.fontStyle.fill = property.fontColor;
+        this.fontStyle.fontFamily = property.fontFamily;
     }
 
     /**
-     * 表示内容を維持したまま、選択状態などを初期化する
+     * ウインドウを再描画する
      */
-    resetPressedState() {
-        this.pressedMenu = false;
-        this.pressedObj = null;
-        this.isFocused = false;
+    redraw() {
+        // 枠付きの矩形を描画
+        const windowRect = this.scene.add.graphics();
+        windowRect.fillStyle(this.windowProperty.bgColor, 1.0);
+        windowRect.fillRoundedRect(0, 0, this.width, this.height, this.windowProperty.frameRound);
+
+        windowRect.lineStyle(this.windowProperty.frameWeight, this.windowProperty.frameColor, 1.0);
+        windowRect.strokeRoundedRect(0, 0, this.width, this.height, this.windowProperty.frameRound);
+
+        this.windowContainer.add(windowRect);
+
+        // ウインドウに表示する内容を描画
+        this.drawDispContent();
     }
 
     /**
-     * コンテンツを表示する
-     * @param {DispContent} content 表示対象のオブジェクト
+     * ウインドウに表示する内容を追加する
+     * 既に同じキーがある場合は、上書きするか追加するかを指定する
+     * 上書きしない場合はエラー
+     * @param {string} key キー
+     * @param {string} content 表示内容
+     * @param {boolean} isOverwrite 上書きするか
      */
-    setDispContent(content) {
-        // 表示コンテンツをリセットする
-        this.resetContent();
-
-        // 表示コンテンツを保存する
-        this.dispObj = content;
-
-        // 表示コンテンツのタイプに応じて表示処理を分岐
-        this.displayContent();
-    }
-
-    /**
-     * 表示コンテンツを処理する
-     */
-    displayContent() {
-        if (this.dispObj.isLine) {
-            this.displayLineContent();
-        } else {
-            this.displayListContent();
-        }
-    }
-
-    /**
-     * 文章コンテンツを表示する
-     */
-    displayLineContent() {
-        // 選択中メニューの番号の調整
-        this.choosedMenuIdx = 0;
-
-        // 表示する文字列の折り返し処理を行う
-        this.dispObj.obj[0] = GraphicUtil.wrapText(
-            this.scene, this.dispObj.dispStr[0], this.fontStyle, this.hSize - this.paddingLine * 2);
-
-        const textObj = this.scene.add.text(
-            this.startX + this.paddingLine,
-            this.startY + this.paddingLine,
-            this.dispObj.obj[0], this.fontStyle
-        ).setOrigin(0);
-
-        // テキストオブジェクトを表示
-        this.dispTextGroup.add(textObj);
-    }
-
-    /**
-     * リストコンテンツを表示する
-     */
-    displayListContent() {
-        // 選択中メニューの番号の調整
-        this.choosedMenuIdx = Math.min(this.choosedMenuIdx, this.dispObj.getContentLength() - 1);
-
-        for (let i = 0; i < this.dispObj.getContentLength(); i++) {
-            const dispString = this.dispObj.dispStr[i];
-
-            // テキストオブジェクト座標の計算
-            const textObjX =
-                this.startX + this.paddingLine + (i % this.menuColNum) * this.hSize / this.menuColNum;
-            const textObjY =
-                this.startY + this.paddingLine + Math.floor(i / this.menuColNum) * (this.paddingLine + this.fontSize);
-
-            const textObj = this.scene.add.text(
-                textObjX, textObjY, dispString, this.fontStyle
-            ).setOrigin(0);
-
-            if (this.dispObj.isMenu) {
-                this.setupMenuInteraction(textObj, i);
+    addDispContent(key, content, isOverwrite = false) {
+        if (this.dispContentMap.has(key)) {
+            if (isOverwrite) {
+                this.dispContentMap.set(key, content);
+            } else {
+                throw new Error(`${key} is already exists.`);
             }
-
-            // テキストオブジェクトを表示
-            this.dispTextGroup.add(textObj);
+        } else {
+            this.dispContentMap.set(key, content);
         }
     }
 
     /**
-     * メニュー項目のインタラクションを設定する
-     * @param {Phaser.GameObjects.Text} textObj テキストオブジェクト
-     * @param {number} index メニュー項目のインデックス
+     * ウインドウに表示する内容を削除する
+     * @param {string} key キー
      */
-    setupMenuInteraction(textObj, index) {
-        // メニュー項目にプロパティを設定する
-        textObj.menuProperty = {
-            menuObj: this.dispObj.obj[index],
-            menuIdx: index
-        };
-
-        textObj.setInteractive();
-
-        // ホバーイベントのリスナーを追加
-        textObj.on('pointerover', () => {
-            if (!this.isActive) return;
-            this.chooseMenu(textObj.menuProperty.menuIdx);
-            this.isFocused = true;
-        });
-
-        // 非ホバーイベントのリスナーを追加
-        textObj.on('pointerout', () => {
-            if (!this.isActive) return;
-            this.isFocused = false;
-        });
-
-        // クリックイベントのリスナーを追加
-        textObj.on('pointerdown', () => {
-            if (!this.isActive) return;
-            this.pressedMenu = true;
-            this.pressedObj = textObj.menuProperty.menuObj;
-        });
+    removeDispContent(key) {
+        this.dispContentMap.delete(key);
     }
 
     /**
-     * ウインドウを描画する
+     * ウインドウに表示する内容を全て削除する
      */
-    drawWindow() {
-        const grph = this.scene.add.graphics();
-        // ウインドウの内部描画
-        grph.fillStyle(
-            Phaser.Display.Color.HexStringToColor(this.bgColor).color, 1.0);
-        grph.fillRoundedRect(
-            this.startX, this.startY, this.hSize, this.vSize,
-            C_COMMON.WINDOW_ROUND);
-
-        // ウインドウの枠線描画
-        grph.lineStyle(
-            C_COMMON.WINDOW_FRAME_WEIGHT,
-            Phaser.Display.Color.HexStringToColor(this.frameColor).color, 1.0);
-        grph.strokeRoundedRect(
-            this.startX, this.startY, this.hSize, this.vSize,
-            C_COMMON.WINDOW_ROUND);
-
-        // ウインドウコンテナに追加
-        this.windowObj = grph;
-        this.windowContainer.add(grph);
+    clearDispContent() {
+        this.dispContentMap.clear();
     }
 
     /**
-     * 指定したメニューを選択状態にする
-     * @param {number} menuIdx 選択状態にするメニューの番号
+     * ウインドウに表示する内容を全て描画する
      */
-    chooseMenu(menuIdx) {
-        // 選択メニュー番号を更新する
-        this.choosedMenuIdx = menuIdx;
-    }
-
-    /**
-     * アクティブ状態を設定する。表示内容はそのままに押下状態関連を初期化する
-     * @param {boolean} active フォーカスの状態
-     * @param {boolean} reset 状態のリセット
-     */
-    setActive(active, reset) {
-        this.isActive = active;
-        this.resetPressedState();
-
-        if (reset) {
-            this.resetContent();
+    drawDispContent() {
+        if (this.dispContentMap.size === 0) {
+            return;
         }
-    }
 
-    /** 自身を完全削除する */
-    destroy() {
-        // ウインドウコンテナの削除
-        this.windowContainer.destroy();
-        // テキストグループの削除
-        this.dispTextGroup.clear(true, true);
+        // 上から順番に描画
+        let y = 0;
+        this.dispContentMap.forEach((content, key) => {
+            // 内容を描画するためのテキストオブジェクトを生成
+            const dispText = this.scene.add.text(
+                C_COMMON.WINDOW_PADDING_LEFT_SMALL,
+                y + C_COMMON.WINDOW_PADDING_LINE_SMALL,
+                content,
+                this.fontStyle
+            );
+
+            this.dispTextGroup.add(dispText);
+            // 次の行に描画するためにy座標を調整
+            y -= this.fontStyle.fontSize + C_COMMON.WINDOW_PADDING_LINE_SMALL;
+
+            // コンテナに追加
+            this.windowContainer.add(dispText);
+        });
     }
 }

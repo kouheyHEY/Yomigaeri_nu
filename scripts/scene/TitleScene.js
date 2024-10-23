@@ -4,13 +4,6 @@ class TitleScene extends BaseScene {
     }
 
     initInstVal() {
-        /** @type {DBManager} */
-        this.dbManager = new DBManager(this);
-        /** @type {MenuManager} */
-        this.menuManager = new MenuManager(this);
-        /** @type {DispManager} */
-        this.dispManager = new DispManager(this);
-
         /** タイトルテキスト */
         this.titleText = null;
 
@@ -28,7 +21,7 @@ class TitleScene extends BaseScene {
     initArea() {
 
         // 背景色の設定
-        this.dispManager.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
+        this.cameras.main.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
 
         // タイトルを表示
         this.titleText = this.add.text(C_TS.TITLE_X, C_TS.TITLE_Y, C_COMMON.GAME_TITLE,
@@ -89,7 +82,7 @@ class TitleScene extends BaseScene {
 
         // つづきから押下時
         this.menuContinue.on('pointerdown', () => {
-            this.scene.start(C_COMMON.SCENE_BATTLESCENE);
+            this.scene.start(C_COMMON.SCENE_IKUSEISCENE);
         });
 
         // クレジット押下時

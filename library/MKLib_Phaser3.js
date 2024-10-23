@@ -39,7 +39,7 @@ class BaseScene extends Phaser.Scene {
      */
     update() {
         throw new Error(
-            `[${this.constructor.name}.update]${C_COMMON.MSG_ERR_NOIMPL}`);
+            `[${this.constructor.name}.update]${"実装されていません"}`);
     }
 
     /**
@@ -48,7 +48,7 @@ class BaseScene extends Phaser.Scene {
      */
     initInstVal() {
         throw new Error(
-            `[${this.constructor.name}.initInstVal]${C_COMMON.MSG_ERR_NOIMPL}`);
+            `[${this.constructor.name}.initInstVal]${"実装されていません"}`);
     }
     /**
      * 子クラスで実装。
@@ -56,6 +56,6 @@ class BaseScene extends Phaser.Scene {
      */
     initArea() {
         throw new Error(
-            `[${this.constructor.name}.initArea]${C_COMMON.MSG_ERR_NOIMPL}`);
+            `[${this.constructor.name}.initArea]${"実装されていません"}`);
     }
 }

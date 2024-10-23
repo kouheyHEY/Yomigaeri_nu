@@ -17,8 +17,7 @@ const config = {
 	scene: [
 		PreLoadScene,
 		TitleScene,
-		IkuseiScene,
-		BattleScene,
+		IkuseiScene
 	],
 
 	fps: {

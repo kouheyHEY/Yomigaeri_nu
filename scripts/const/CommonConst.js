@@ -15,10 +15,6 @@ const C_COMMON = {
     SCENE_TITLESCENE: 'TitleScene',
     /** シーン名 IkuseiScene */
     SCENE_IKUSEISCENE: 'IkuseiScene',
-    /** シーン名 BattleScene */
-    SCENE_BATTLESCENE: 'BattleScene',
-    /** シーン名 GameClearScene */
-    SCENE_GAMECLEARSCENE: 'GameClearScene',
 
     /** フォント ビット太字 */
     FONT_FAMILY_BIT12_BOLD: 'Bit12Bold',
@@ -80,64 +76,12 @@ const C_COMMON = {
     /** キー定数 スペースキー */
     KEY_SPACE: "SPACE",
 
-    /** 記号 パイプ */
-    SIGN_PIPE: "|",
-
-    /** ウインドウ 表示コンテンツ種類 文章 */
-    WINDOW_CONTENT_TYPE_LINE: 1,
-    /** ウインドウ 表示コンテンツ種類 メニューリスト */
-    WINDOW_CONTENT_TYPE_MENU: 2,
-    /** ウインドウ 表示コンテンツ種類 アイテムリスト */
-    WINDOW_CONTENT_TYPE_ITEM: 3,
-    /** ウインドウ 表示コンテンツ種類 キャラリスト */
-    WINDOW_CONTENT_TYPE_CHARA: 4,
-    /** ウインドウ 表示コンテンツ種類 テキストリスト */
-    WINDOW_CONTENT_TYPE_TEXTLIST: 5,
-    /** ウインドウ 表示コンテンツ種類 フィールドリスト */
-    WINDOW_CONTENT_TYPE_FIELD: 6,
-    /** ウインドウ 表示コンテンツ種類 鍛練メニューリスト */
-    WINDOW_CONTENT_TYPE_TRAINING: 7,
-    /** ウインドウ 表示コンテンツ種類 生活メニューリスト */
-    WINDOW_CONTENT_TYPE_LIFE: 8,
-    /** ウインドウ 表示コンテンツ種類 バトル行動リスト */
-    WINDOW_CONTENT_TYPE_BATTLEACTION: 9,
-
-    /** 効果種類 アイテム */
-    EFFECT_TYPE_ITEM: 1,
-    /** 効果種類 アクション */
-    EFFECT_TYPE_ACTION: 2,
-
-    /** メニュー選択肢 戻る */
-    WINDOW_MENU_BACK: "戻る",
-    /** 子メニュー無（戻る押下時） */
-    CHILDMENU_NULL_BACK: -1,
-    /** 子メニュー無（戻る押下時以外） */
-    CHILDMENU_NULL_NEXT: 1,
-
     /** カーソルウインドウ 幅 */
     WINDOW_CURSOR_W: 320,
     /** カーソルウインドウ 高さ */
     WINDOW_CURSOR_H: 72,
     /** カーソルウインドウ 角とマウスの距離 */
     WINDOW_CURSOR_CORNER_POS: 24,
-
-    /** メニュー用ウインドウ X座標 */
-    WINDOW_MENU_X: 64,
-    /** メニュー用ウインドウ Y座標 */
-    WINDOW_MENU_Y: 480,
-    /** メニュー用ウインドウ 幅 */
-    WINDOW_MENU_W: 256,
-    /** メニュー用ウインドウ 高さ */
-    WINDOW_MENU_H: 192,
-
-    /** メイン用テキストウインドウ X座標 */
-    WINDOW_TEXT_MAIN_X: 384,
-    /** メイン用テキストウインドウ Y座標 */
-    WINDOW_TEXT_MAIN_Y: 480,
-    /** メイン用テキストウインドウ 幅 */
-    WINDOW_TEXT_MAIN_W: 832,
-    /** メイン用テキストウインドウ 高さ */
-    WINDOW_TEXT_MAIN_H: 192,
 
     /** メイン用ウインドウ メニュー列数 */
     WINDOW_TEXT_MAIN_COL_NUM: 3,

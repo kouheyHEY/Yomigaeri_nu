@@ -11,10 +11,11 @@ class IkuseiScene extends BaseScene {
         // 背景色を設定
         this.cameras.main.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
 
-        // 左下にウインドウを表示
-        this.menuWindow = new TextWindow(this, C_IS.WINDOW_MENU_X, C_IS.WINDOW_MENU_Y, C_IS.WINDOW_MENU_W, C_IS.WINDOW_MENU_H);
+        // 画面右側にウインドウを表示
+        this.infoWindow = new TextWindow(this, C_IS.WINDOW_INFO_X, C_IS.WINDOW_INFO_Y, C_IS.WINDOW_INFO_W, C_IS.WINDOW_INFO_H, C_IS.WINDOW_INFO_COLUMN);
+
         // ウインドウのプロパティを設定
-        this.menuWindow.setProperty({
+        this.infoWindow.setProperty({
             frameWeight: C_COMMON.WINDOW_FRAME_WEIGHT,
             frameColor: C_COMMON.COMMON_COLOR_WINDOW_FRAME,
             frameRound: C_COMMON.WINDOW_ROUND,
@@ -23,16 +24,18 @@ class IkuseiScene extends BaseScene {
             fontColor: C_COMMON.COMMON_COLOR_WINDOW_FONT,
             fontFamily: C_COMMON.FONT_FAMILY_BIT12,
         });
+
         // ウインドウに表示する内容を追加
-        this.menuWindow.addDispContent(
-            C_MENU.DISP_CONTENT_MAP.TALK.KEY,
-            C_MENU.DISP_CONTENT_MAP.TALK.STRING
-        );
+        for (const menu of C_MASTER.MENU_LIST) {
+            this.infoWindow.addDispContent(
+                menu.KEY,
+                menu
+            );
+        }
         // ウインドウを描画
-        this.menuWindow.redraw();
+        this.infoWindow.redraw();
     }
 
     update() {
-        this.menuWindow.redraw();
     }
 }

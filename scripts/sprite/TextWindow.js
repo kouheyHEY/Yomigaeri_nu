@@ -1,10 +1,20 @@
 class TextWindow {
-    constructor(scene, x, y, width, height) {
+    /**
+     * コンストラクタ
+     * @param {Phaser.Scene} scene シーン
+     * @param {number} x X座標
+     * @param {number} y Y座標
+     * @param {number} width 幅
+     * @param {number} height 高さ
+     * @param {number} column 列数
+     */
+    constructor(scene, x, y, width, height, column) {
         this.scene = scene;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.column = column;
 
         this.dispContentMap = new Map();
 
@@ -48,6 +58,14 @@ class TextWindow {
     }
 
     /**
+     * ウインドウの列数を設定する
+     * @param {number} column 列数
+     */
+    setColumn(column) {
+        this.column = column;
+    }
+
+    /**
      * ウインドウを再描画する
      */
     redraw() {
@@ -60,6 +78,9 @@ class TextWindow {
         windowRect.strokeRoundedRect(0, 0, this.width, this.height, this.windowProperty.frameRound);
 
         this.windowContainer.add(windowRect);
+
+        // テキストグループの内容をクリア
+        this.dispTextGroup.clear(true, true);
 
         // ウインドウに表示する内容を描画
         this.drawDispContent();
@@ -108,23 +129,33 @@ class TextWindow {
             return;
         }
 
-        // 上から順番に描画
+        // 描画可能な範囲
+        const drawableWidth = this.width - C_COMMON.WINDOW_PADDING_LEFT_SMALL * 2;
+
+        // 左上から順番に描画
+        let x = 0;
         let y = 0;
-        this.dispContentMap.forEach((content, key) => {
+        let i = 0;
+        // マップを順番に処理
+        for (const [key, content] of this.dispContentMap) {
+
+            // 次の行,列に描画するためにx,y座標を調整
+            x = (drawableWidth / this.column) * (i % this.column);
+            y = (CommonUtil.convertPxToNumber(this.fontStyle.fontSize) + C_COMMON.WINDOW_PADDING_LINE_SMALL) * Math.floor(i / this.column);
+
             // 内容を描画するためのテキストオブジェクトを生成
             const dispText = this.scene.add.text(
-                C_COMMON.WINDOW_PADDING_LEFT_SMALL,
+                x + C_COMMON.WINDOW_PADDING_LEFT_SMALL,
                 y + C_COMMON.WINDOW_PADDING_LINE_SMALL,
-                content,
+                content.STRING,
                 this.fontStyle
             );
 
             this.dispTextGroup.add(dispText);
-            // 次の行に描画するためにy座標を調整
-            y -= this.fontStyle.fontSize + C_COMMON.WINDOW_PADDING_LINE_SMALL;
 
             // コンテナに追加
             this.windowContainer.add(dispText);
-        });
+            i++;
+        }
     }
 }

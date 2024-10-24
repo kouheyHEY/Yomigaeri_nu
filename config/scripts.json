@@ -6,7 +6,7 @@
                 "scripts/const/CommonConst.js",
                 "scripts/const/TSConst.js",
                 "scripts/const/ISConst.js",
-                "scripts/const/MenuConst.js"
+                "scripts/const/MasterConst.js"
             ]
         },
         {

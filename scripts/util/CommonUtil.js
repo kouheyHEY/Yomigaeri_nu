@@ -32,4 +32,17 @@ class CommonUtil {
 
         return parseInt(str);
     }
+
+    /**
+     * 文字列をフォーマットする
+     * 「{}」に順番に値を割り当てていく
+     * 使い方：
+     * @param {string} str 文字列
+     * @param {Object} list フォーマットするオブジェクトのリスト
+     * @returns {string} フォーマットした文字列
+     */
+    static formatString(str, list) {
+        let index = 0;
+        return str.replace(/\{\}/g, () => list[index++] ?? '');
+    }
 }

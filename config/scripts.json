@@ -16,6 +16,12 @@
             ]
         },
         {
+            "category": "モデルクラス",
+            "files": [
+                "scripts/model/WanModel.js"
+            ]
+        },
+        {
             "category": "シーンクラス",
             "files": [
                 "scripts/scene/PreLoadScene.js",

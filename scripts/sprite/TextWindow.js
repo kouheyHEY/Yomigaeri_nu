@@ -95,13 +95,22 @@ class TextWindow {
      * @param {boolean} isOverwrite 上書きするか
      */
     addDispContent(key, content, isOverwrite = false) {
+        // 改行の場合は、キーを連番にする
+        if (key === C_COMMON.BR) {
+            this.dispContentMap.set(key + this.dispContentMap.size, content);
+            return;
+        }
+
+        // 既に同じキーがある場合は、上書きするか追加するかを指定する
         if (this.dispContentMap.has(key)) {
             if (isOverwrite) {
+                // 上書きする
                 this.dispContentMap.set(key, content);
             } else {
                 throw new Error(`${key} is already exists.`);
             }
         } else {
+            // 追加する
             this.dispContentMap.set(key, content);
         }
     }
@@ -139,6 +148,14 @@ class TextWindow {
         // マップを順番に処理
         for (const [key, content] of this.dispContentMap) {
 
+            if (content.KEY === C_COMMON.BR) {
+                // 改行の場合
+                // 最終列だった場合は空行を挟み、そうでない場合は空列を挟んで次の行にする
+                i += this.column - (i % this.column);
+                continue;
+            }
+            console.log(i);
+
             // 次の行,列に描画するためにx,y座標を調整
             x = (drawableWidth / this.column) * (i % this.column);
             y = (CommonUtil.convertPxToNumber(this.fontStyle.fontSize) + C_COMMON.WINDOW_PADDING_LINE_SMALL) * Math.floor(i / this.column);
@@ -150,9 +167,7 @@ class TextWindow {
                 content.STRING,
                 this.fontStyle
             );
-
             this.dispTextGroup.add(dispText);
-
             // コンテナに追加
             this.windowContainer.add(dispText);
             i++;

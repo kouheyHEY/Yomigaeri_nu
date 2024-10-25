@@ -89,4 +89,30 @@ const C_COMMON = {
     /** エラーメッセージ 実装されていない */
     MSG_ERR_NOIMPL: "実装されていません。",
 
+    /** 改行 */
+    BR: "br",
+
+    /** 各アクションのキー */
+    ACTION_KEY: {
+        /** 散歩 */
+        WALK: "walk",
+        /** ごはん */
+        FOOD: "food",
+        /** 風呂 */
+        BATH: "bath",
+        /** 寝る */
+        SLEEP: "sleep",
+        /** じゃれつく */
+        JARETSUKU: "jaretsuku",
+        /** 筋トレ */
+        TRAINING: "training",
+        /** KOTARO */
+        KOTARO: "kotaro",
+        /** ワンクイズ王 */
+        WANKUIZU: "wankuizu",
+        /** ワンコレ */
+        WANKORE: "wankore",
+        /** 転生 */
+        ASCENSION: "ascension"
+    },
 };

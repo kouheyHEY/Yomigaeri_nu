@@ -1,67 +1,163 @@
+/** マスターの定義 */
+
+/**
+ * @typedef {Object} MenuItem
+ * @property {string} STRING 表示内容 必須
+ * @property {string} KEY キー 必須
+ * @property {string} EXPL 説明 任意
+ * @property {string} TYPE タイプ 任意
+ * @property {number} MAX 最大値 任意
+ * @property {number} VALUE 値 任意
+ * @property {number} COL 表示の際の列数 任意
+ */
+
 const C_MASTER = {
-    /** 表示内容の定義のリスト */
+    /** @type {MenuItem[]} パラメータのリスト */
+    PARAM_LIST: [
+        /** @type {MenuItem} 名前 */
+        {
+            STRING: "{}",
+            KEY: "name",
+        },
+        /** @type {MenuItem} 転生レベル */
+        {
+            STRING: "転生レベル：{}",
+            KEY: "ascensionLevel",
+        },
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
+        /** @type {MenuItem} 体力 */
+        {
+            STRING: "体力：{}",
+            KEY: "hp",
+        },
+        /** @type {MenuItem} 体力ゲージ */
+        {
+            TYPE: "gauge",
+            MAX: 0,
+            MAX_KEY: "hpMax",
+            VALUE: 0,
+            VALUE_KEY: "hp",
+            COL: 0,
+            KEY: "hpGauge",
+        },
+        /** @type {MenuItem} なつき度 */
+        {
+            STRING: "なつき度：{}",
+            KEY: "affection",
+        },
+        /** @type {MenuItem} なつき度ゲージ */
+        {
+            TYPE: "gauge",
+            MAX: 0,
+            MAX_KEY: "affectionMax",
+            VALUE: 0,
+            VALUE_KEY: "affection",
+            COL: 0,
+            KEY: "affectionGauge",
+
+        },
+        /** @type {MenuItem} 筋力 */
+        {
+            STRING: "筋力：{}",
+            KEY: "muscle",
+        },
+        /** @type {MenuItem} 知力 */
+        {
+            STRING: "知力：{}",
+            KEY: "intelligence",
+        },
+        /** @type {MenuItem} 魅力 */
+        {
+            STRING: "魅力：{}",
+            KEY: "charm",
+        },
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
+    ],
+    /** @type {MenuItem[]} 表示内容の定義のリスト */
     MENU_LIST: [
-        /** 散歩 */
+        /** @type {MenuItem} 散歩 */
         {
             STRING: "散歩",
             KEY: "walk",
             EXPL: "ワンを散歩に連れていく。",
         },
-        /** ごはん */
+        /** @type {MenuItem} ごはん */
         {
             STRING: "ごはん",
             KEY: "food",
             EXPL: "ワンにご飯をあげる。",
         },
-        /** 風呂 */
+        /** @type {MenuItem} 風呂 */
         {
             STRING: "風呂",
             KEY: "bath",
             EXPL: "ワンをきれいにする。",
         },
-        /** 寝る */
+        /** @type {MenuItem} 寝る */
         {
             STRING: "寝る",
             KEY: "sleep",
             EXPL: "ワンを寝かせる。",
         },
-        /** じゃれつく */
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
+        /** @type {MenuItem} じゃれつく */
         {
             STRING: "じゃれつく",
             KEY: "jaretsuku",
             EXPL: "ワンとじゃれついて遊ぶ。",
         },
-        /** 筋トレ */
+        /** @type {MenuItem}    筋トレ */
         {
             STRING: "筋トレ",
             KEY: "training",
             EXPL: "ワンの肉体を鍛え上げる。",
         },
-        /** KOTARO */
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
+        /** @type {MenuItem} KOTARO */
         {
             STRING: "KOTARO",
             KEY: "kotaro",
             EXPL: "最強の肉体を持つワンを決めるコンテストに出場する。",
         },
-        /** ワンクイズ王 */
+        /** @type {MenuItem} ワンクイズ王 */
         {
             STRING: "ワンクイズ王",
             KEY: "wankuizu",
             EXPL: "世界のワン達と知力を競うコンテストに出場する。",
         },
-        /** ワンコレ */
+        /** @type {MenuItem} ワンコレ */
         {
             STRING: "ワンコレ",
             KEY: "wankore",
             EXPL: "最高に美しいワンを決めるコンテストに出場する。",
         },
-        /** 転生 */
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
+        /** @type {MenuItem} 転生 */
         {
             STRING: "転生",
             KEY: "ascension",
             EXPL: "ワンの能力を一部引き継いで新たな肉体に生まれ変わる。",
         },
-        /** 離れる */
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
+        /** @type {MenuItem} 離れる */
         {
             STRING: "離れる",
             KEY: "end",

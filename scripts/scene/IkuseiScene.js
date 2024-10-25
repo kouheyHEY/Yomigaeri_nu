@@ -4,6 +4,7 @@ class IkuseiScene extends BaseScene {
     }
 
     initInstVal() {
+        this.wanModel = new WanModel();
     }
 
     initArea() {
@@ -25,7 +26,30 @@ class IkuseiScene extends BaseScene {
             fontFamily: C_COMMON.FONT_FAMILY_BIT12,
         });
 
-        // ウインドウに表示する内容を追加
+        // ウインドウに表示するパラメータを追加
+        const wanDispParamObj = this.wanModel.getDispParamObj();
+        for (const param of C_MASTER.PARAM_LIST) {
+            // ゲージの場合
+            if (param.TYPE === "gauge") {
+                param.MAX = wanDispParamObj[param.KEY];
+                param.VALUE = wanDispParamObj[param.KEY];
+                param.COL = this.infoWindow.column;
+            }
+            // 改行ではない場合
+            if (param.KEY !== "br") {
+                param.STRING = CommonUtil.formatString(
+                    param.STRING,
+                    [wanDispParamObj[param.KEY]]
+                );
+            }
+            // ウインドウに表示するパラメータを追加
+            this.infoWindow.addDispContent(
+                param.KEY,
+                param
+            );
+        }
+
+        // ウインドウに表示するメニュー内容を追加
         for (const menu of C_MASTER.MENU_LIST) {
             this.infoWindow.addDispContent(
                 menu.KEY,

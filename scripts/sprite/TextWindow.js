@@ -154,7 +154,6 @@ class TextWindow {
                 i += this.column - (i % this.column);
                 continue;
             }
-            console.log(i);
 
             // 次の行,列に描画するためにx,y座標を調整
             x = (drawableWidth / this.column) * (i % this.column);

@@ -34,13 +34,26 @@ class IkuseiScene extends BaseScene {
                 param.MAX = wanDispParamObj[param.KEY];
                 param.VALUE = wanDispParamObj[param.KEY];
                 param.COL = this.infoWindow.column;
-            }
-            // 改行ではない場合
-            if (param.KEY !== "br") {
-                param.STRING = CommonUtil.formatString(
-                    param.STRING,
-                    [wanDispParamObj[param.KEY]]
-                );
+            } else {
+                // 改行ではない場合
+                if (param.KEY !== "br") {
+                    // 置き換え対象の値を取得
+                    const replaceValList = (() => {
+                        if (typeof wanDispParamObj[param.KEY] === "string") {
+                            return [wanDispParamObj[param.KEY]];
+                        } else if (Array.isArray(wanDispParamObj[param.KEY])) {
+                            return wanDispParamObj[param.KEY];
+                        } else {
+                            return [wanDispParamObj[param.KEY]];
+                        }
+                    })();
+
+                    // 文字列をフォーマット
+                    param.STRING = CommonUtil.formatString(
+                        param.STRING,
+                        replaceValList
+                    );
+                }
             }
             // ウインドウに表示するパラメータを追加
             this.infoWindow.addDispContent(

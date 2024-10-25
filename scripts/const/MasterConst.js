@@ -24,13 +24,9 @@ const C_MASTER = {
             STRING: "転生レベル：{}",
             KEY: "ascensionLevel",
         },
-        /** @type {MenuItem} 改行 */
-        {
-            KEY: "br",
-        },
         /** @type {MenuItem} 体力 */
         {
-            STRING: "体力：{}",
+            STRING: "体力：{}/{}",
             KEY: "hp",
         },
         /** @type {MenuItem} 体力ゲージ */
@@ -45,7 +41,7 @@ const C_MASTER = {
         },
         /** @type {MenuItem} なつき度 */
         {
-            STRING: "なつき度：{}",
+            STRING: "なつき度：{}/{}",
             KEY: "affection",
         },
         /** @type {MenuItem} なつき度ゲージ */
@@ -152,10 +148,6 @@ const C_MASTER = {
             STRING: "転生",
             KEY: "ascension",
             EXPL: "ワンの能力を一部引き継いで新たな肉体に生まれ変わる。",
-        },
-        /** @type {MenuItem} 改行 */
-        {
-            KEY: "br",
         },
         /** @type {MenuItem} 離れる */
         {

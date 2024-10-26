@@ -6,8 +6,8 @@
  * @property {string} KEY キー 必須
  * @property {string} EXPL 説明 任意
  * @property {string} TYPE タイプ 任意
- * @property {number} MAX 最大値 任意
  * @property {number} VALUE 値 任意
+ * @property {number} VALUE_KEY 値のキー 任意
  * @property {number} COL 表示の際の列数 任意
  */
 
@@ -29,14 +29,16 @@ const C_MASTER = {
             STRING: "体力：{}/{}",
             KEY: "hp",
         },
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
         /** @type {MenuItem} 体力ゲージ */
         {
             TYPE: "gauge",
-            MAX: 0,
-            MAX_KEY: "hpMax",
             VALUE: 0,
-            VALUE_KEY: "hp",
-            COL: 0,
+            VALUE_KEY: "hpRate",
+            COL: 2,
             KEY: "hpGauge",
         },
         /** @type {MenuItem} なつき度 */
@@ -44,14 +46,16 @@ const C_MASTER = {
             STRING: "なつき度：{}/{}",
             KEY: "affection",
         },
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
         /** @type {MenuItem} なつき度ゲージ */
         {
             TYPE: "gauge",
-            MAX: 0,
-            MAX_KEY: "affectionMax",
             VALUE: 0,
-            VALUE_KEY: "affection",
-            COL: 0,
+            VALUE_KEY: "affectionRate",
+            COL: 2,
             KEY: "affectionGauge",
 
         },
@@ -69,6 +73,10 @@ const C_MASTER = {
         {
             STRING: "魅力：{}",
             KEY: "charm",
+        },
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
         },
         /** @type {MenuItem} 改行 */
         {
@@ -100,10 +108,6 @@ const C_MASTER = {
             STRING: "寝る",
             KEY: "sleep",
             EXPL: "ワンを寝かせる。",
-        },
-        /** @type {MenuItem} 改行 */
-        {
-            KEY: "br",
         },
         /** @type {MenuItem} じゃれつく */
         {
@@ -143,6 +147,10 @@ const C_MASTER = {
         {
             KEY: "br",
         },
+        /** @type {MenuItem} 改行 */
+        {
+            KEY: "br",
+        },
         /** @type {MenuItem} 転生 */
         {
             STRING: "転生",
@@ -156,4 +164,21 @@ const C_MASTER = {
             EXPL: "ゲームを終了する。",
         },
     ],
+    /** 会話内容 */
+    CONVERSATIONS: {
+        /** @type {string} キー */
+        KEY: "conversation",
+        /** @type {string[]} デフォルトの会話内容のリスト */
+        DEFAULT_LIST: [
+            "寝転がっている。",
+            "丸まっている。",
+            "つぶらな瞳でこちらを見ている。",
+            "おかえり、と言わんばかりの笑顔。",
+        ],
+        /** @type {string[]} 散歩の会話内容のリスト */
+        WALK_LIST: [
+            "散歩に連れて行けと圧をかけている。",
+        ],
+
+    },
 };

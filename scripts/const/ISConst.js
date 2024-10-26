@@ -8,16 +8,49 @@ const C_IS = {
     WINDOW_INFO_W: 448,
     /** インフォ表示用ウインドウ 高さ */
     WINDOW_INFO_H: 672,
+    /** インフォ表示用ウインドウの列数 */
+    WINDOW_INFO_COLUMN: 2,
 
     /** メイン用テキストウインドウ X座標 */
     WINDOW_TEXT_MAIN_X: 32,
     /** メイン用テキストウインドウ Y座標 */
     WINDOW_TEXT_MAIN_Y: 552,
     /** メイン用テキストウインドウ 幅 */
-    WINDOW_TEXT_MAIN_W: 704,
+    WINDOW_TEXT_MAIN_W: 736,
     /** メイン用テキストウインドウ 高さ */
     WINDOW_TEXT_MAIN_H: 144,
+    /** メイン用テキストウインドウの列数 */
+    WINDOW_TEXT_MAIN_COLUMN: 2,
 
-    /** インフォ表示用ウインドウの列数 */
-    WINDOW_INFO_COLUMN: 2,
+    /** ゲージのプロパティ */
+    GAUGE_PROPERTY: {
+        hpGauge: {
+            /** ゲージの幅 */
+            WIDTH: 320,
+            /** ゲージの高さ */
+            HEIGHT: 16,
+            /** ゲージの枠の幅 */
+            BORDER_WIDTH: 2,
+            /** ゲージの枠の色 */
+            BORDER_COLOR: C_COMMON.COMMON_COLOR_BLACK_1,
+            /** ゲージの背景色 */
+            BG_COLOR: C_COMMON.COMMON_COLOR_WHITE,
+            /** ゲージのバーの色 */
+            BAR_COLOR: C_COMMON.COMMON_COLOR_BLACK_4,
+        },
+        affectionGauge: {
+            /** ゲージの幅 */
+            WIDTH: 320,
+            /** ゲージの高さ */
+            HEIGHT: 16,
+            /** ゲージの枠の幅 */
+            BORDER_WIDTH: 2,
+            /** ゲージの枠の色 */
+            BORDER_COLOR: C_COMMON.COMMON_COLOR_BLACK_1,
+            /** ゲージの背景色 */
+            BG_COLOR: C_COMMON.COMMON_COLOR_WHITE,
+            /** ゲージのバーの色 */
+            BAR_COLOR: C_COMMON.COMMON_COLOR_BLACK_4,
+        },
+    },
 };

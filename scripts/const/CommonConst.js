@@ -53,7 +53,7 @@ const C_COMMON = {
     COMMON_COLOR_WINDOW_FRAME: '#1e0033',
 
     /** ウインドウ 行間 小 */
-    WINDOW_PADDING_LINE_SMALL: 18,
+    WINDOW_PADDING_LINE_SMALL: 16,
     /** ウインドウ 行間 極小 */
     WINDOW_PADDING_LINE_SMALL_2: 12,
     /** ウインドウ 丸み */

@@ -12,6 +12,7 @@ class IkuseiScene extends BaseScene {
         // 背景色を設定
         this.cameras.main.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
 
+        /** インフォ表示用ウインドウの描画 START */
         // 画面右側にウインドウを表示
         this.infoWindow = new TextWindow(this, C_IS.WINDOW_INFO_X, C_IS.WINDOW_INFO_Y, C_IS.WINDOW_INFO_W, C_IS.WINDOW_INFO_H, C_IS.WINDOW_INFO_COLUMN);
 
@@ -31,8 +32,7 @@ class IkuseiScene extends BaseScene {
         for (const param of C_MASTER.PARAM_LIST) {
             // ゲージの場合
             if (param.TYPE === "gauge") {
-                param.MAX = wanDispParamObj[param.KEY];
-                param.VALUE = wanDispParamObj[param.KEY];
+                param.VALUE = wanDispParamObj[param.VALUE_KEY];
                 param.COL = this.infoWindow.column;
             } else {
                 // 改行ではない場合
@@ -71,8 +71,37 @@ class IkuseiScene extends BaseScene {
         }
         // ウインドウを描画
         this.infoWindow.redraw();
+        /** インフォ表示用ウインドウの描画 END */
+
+        /** メイン用テキストウインドウの描画 START */
+        this.mainWindow = new TextWindow(this, C_IS.WINDOW_TEXT_MAIN_X, C_IS.WINDOW_TEXT_MAIN_Y, C_IS.WINDOW_TEXT_MAIN_W, C_IS.WINDOW_TEXT_MAIN_H, C_IS.WINDOW_INFO_COLUMN);
+        this.mainWindow.setProperty({
+            frameWeight: C_COMMON.WINDOW_FRAME_WEIGHT,
+            frameColor: C_COMMON.COMMON_COLOR_WINDOW_FRAME,
+            frameRound: C_COMMON.WINDOW_ROUND,
+            bgColor: C_COMMON.COMMON_COLOR_WINDOW_BG,
+            fontSize: C_COMMON.FONT_SIZE_SMALL,
+            fontColor: C_COMMON.COMMON_COLOR_WINDOW_FONT,
+            fontFamily: C_COMMON.FONT_FAMILY_BIT12,
+        });
+        // ウインドウにランダムに会話内容を表示
+        this.mainWindow.addDispContent(
+            "conversation",
+            {
+                STRING: C_MASTER.CONVERSATIONS.DEFAULT_LIST[Math.floor(Math.random() * C_MASTER.CONVERSATIONS.DEFAULT_LIST.length)],
+                KEY: "conversation",
+            }
+        );
+        // ウインドウを描画
+        this.mainWindow.redraw();
+        /** メイン用テキストウインドウの描画 END */
     }
 
     update() {
+        // 項目がホバーされている時
+        if (this.infoWindow.exParam.expl != null) {
+            // メインウインドウの表示内容を更新
+            this.mainWindow.updateMenu(C_MASTER.CONVERSATIONS.KEY, this.infoWindow.exParam.expl);
+        }
     }
 }

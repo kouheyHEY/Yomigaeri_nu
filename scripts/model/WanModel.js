@@ -12,13 +12,13 @@ class WanModel {
         /** @type {number} 転生レベル */
         this.ascensionLevel = 0;
         /** @type {number} 体力 */
-        this.hp = 0;
+        this.hp = 2;
         /** @type {number} 体力最大値 */
-        this.hpMax = 0;
+        this.hpMax = 3;
         /** @type {number} なつき度 */
-        this.affection = 0;
+        this.affection = 2;
         /** @type {number} なつき度最大値 */
-        this.affectionMax = 0;
+        this.affectionMax = 3;
         /** @type {number} 筋力 */
         this.muscle = 0;
         /** @type {number} 知力 */
@@ -51,7 +51,9 @@ class WanModel {
             name: this.name,
             ascensionLevel: this.ascensionLevel,
             hp: [this.hp, this.hpMax],
+            hpRate: this.hp / this.hpMax,
             affection: [this.affection, this.affectionMax],
+            affectionRate: this.affection / this.affectionMax,
             muscle: this.muscle,
             intelligence: this.intelligence,
             charm: this.charm,

@@ -15,25 +15,37 @@ class TextWindow {
         this.width = width;
         this.height = height;
         this.column = column;
-
+        /** @type {Map<string, MenuItem>} 表示内容のマップ */
         this.dispContentMap = new Map();
-
+        /** @type {Object} ウインドウのプロパティ */
         this.windowProperty = {
             frameWeight: C_COMMON.WINDOW_FRAME_WEIGHT,
             frameColor: CommonUtil.convertColorCode(C_COMMON.COMMON_COLOR_WINDOW_FRAME),
             frameRound: C_COMMON.WINDOW_ROUND,
             bgColor: CommonUtil.convertColorCode(C_COMMON.COMMON_COLOR_WINDOW_BG),
         };
-
+        /** @type {Object} フォントのスタイル */
         this.fontStyle = {
             fontSize: C_COMMON.FONT_SIZE_SMALL,
             fill: C_COMMON.COMMON_COLOR_WINDOW_FONT,
             fontFamily: C_COMMON.FONT_FAMILY_BIT12,
         };
-
-        this.dispTextGroup = this.scene.add.group();
-
+        /** @type {Phaser.GameObjects.Group} 表示オブジェクトグループ */
+        this.dispObjGroup = this.scene.add.group();
+        /** @type {Map<string, Guage>} ゲージのマップ */
+        this.guageMap = new Map();
+        /** @type {Map<string, MenuItem>} メニューのマップ */
+        this.menuMap = new Map();
+        /** @type {Phaser.GameObjects.Container} ウインドウコンテナ */
         this.windowContainer = this.scene.add.container(this.x, this.y);
+
+        /**
+         * @type {Object} 追加パラメータ
+         * @property {string} expl 説明
+         */
+        this.exParam = {
+            expl: null,
+        };
     }
 
     /**
@@ -79,11 +91,36 @@ class TextWindow {
 
         this.windowContainer.add(windowRect);
 
-        // テキストグループの内容をクリア
-        this.dispTextGroup.clear(true, true);
+        // 表示オブジェクトグループの内容をクリア
+        this.dispObjGroup.clear(true, true);
 
         // ウインドウに表示する内容を描画
         this.drawDispContent();
+    }
+
+    /**
+     * ゲージを更新する
+     * @param {string} guageKey ゲージのキー
+     * @param {number} value 値
+     */
+    updateGuage(guageKey, value) {
+        const guage = this.guageMap.get(guageKey);
+        if (guage) {
+            guage.value = value;
+            guage.draw();
+        }
+    }
+
+    /**
+     * メニューを更新する
+     * @param {string} menuKey メニューのキー
+     * @param {string} content 表示内容
+     */
+    updateMenu(menuKey, content) {
+        const menu = this.menuMap.get(menuKey);
+        if (menu) {
+            menu.setText(content);
+        }
     }
 
     /**
@@ -147,29 +184,60 @@ class TextWindow {
         let i = 0;
         // マップを順番に処理
         for (const [key, content] of this.dispContentMap) {
-
             if (content.KEY === C_COMMON.BR) {
                 // 改行の場合
                 // 最終列だった場合は空行を挟み、そうでない場合は空列を挟んで次の行にする
                 i += this.column - (i % this.column);
                 continue;
+            } else if (content.TYPE === "gauge") {
+                // ゲージの場合
+                const w = drawableWidth * content.COL / this.column;
+                const h = CommonUtil.convertPxToNumber(this.fontStyle.fontSize);
+                x = (drawableWidth - w) / 2;
+                y = (h + C_COMMON.WINDOW_PADDING_LINE_SMALL) * Math.floor(i / this.column);
+
+                // ゲージを描画
+                const guage = new Guage(
+                    this.scene,
+                    x + C_COMMON.WINDOW_PADDING_LEFT_SMALL, y + C_COMMON.WINDOW_PADDING_LINE_SMALL, w, h,
+                    C_IS.GAUGE_PROPERTY[content.KEY].BORDER_WIDTH,
+                    content.VALUE,
+                    C_IS.GAUGE_PROPERTY[content.KEY].BG_COLOR,
+                    C_IS.GAUGE_PROPERTY[content.KEY].BAR_COLOR,
+                    C_IS.GAUGE_PROPERTY[content.KEY].BORDER_COLOR
+                );
+                guage.draw();
+                this.guageMap.set(key, guage);
+                this.dispObjGroup.add(guage.guageGraphics);
+                this.windowContainer.add(guage.guageGraphics);
+                i += content.COL;
+            } else {
+                // テキストの場合
+                // 次の行,列に描画するためにx,y座標を調整
+                x = (drawableWidth / this.column) * (i % this.column);
+                y = (CommonUtil.convertPxToNumber(this.fontStyle.fontSize) + C_COMMON.WINDOW_PADDING_LINE_SMALL) * Math.floor(i / this.column);
+                // 内容を描画するためのテキストオブジェクトを生成
+                const dispText = this.scene.add.text(
+                    x + C_COMMON.WINDOW_PADDING_LEFT_SMALL,
+                    y + C_COMMON.WINDOW_PADDING_LINE_SMALL,
+                    content.STRING,
+                    this.fontStyle
+                );
+
+                dispText.setInteractive();
+                // ホバー時のアクションを設定
+                dispText.on("pointerover", () => {
+                    this.exParam.expl = content.EXPL;
+                });
+                // ホバー解除時のアクションを設定
+                dispText.on("pointerout", () => {
+                    this.exParam.expl = "";
+                });
+                this.menuMap.set(key, dispText);
+                this.dispObjGroup.add(dispText);
+                this.windowContainer.add(dispText);
+                i++;
             }
-
-            // 次の行,列に描画するためにx,y座標を調整
-            x = (drawableWidth / this.column) * (i % this.column);
-            y = (CommonUtil.convertPxToNumber(this.fontStyle.fontSize) + C_COMMON.WINDOW_PADDING_LINE_SMALL) * Math.floor(i / this.column);
-
-            // 内容を描画するためのテキストオブジェクトを生成
-            const dispText = this.scene.add.text(
-                x + C_COMMON.WINDOW_PADDING_LEFT_SMALL,
-                y + C_COMMON.WINDOW_PADDING_LINE_SMALL,
-                content.STRING,
-                this.fontStyle
-            );
-            this.dispTextGroup.add(dispText);
-            // コンテナに追加
-            this.windowContainer.add(dispText);
-            i++;
         }
     }
 }

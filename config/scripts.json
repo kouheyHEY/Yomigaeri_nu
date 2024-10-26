@@ -12,7 +12,8 @@
         {
             "category": "スプライトクラス",
             "files": [
-                "scripts/sprite/TextWindow.js"
+                "scripts/sprite/TextWindow.js",
+                "scripts/sprite/Guage.js"
             ]
         },
         {

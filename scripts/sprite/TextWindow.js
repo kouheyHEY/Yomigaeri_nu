@@ -34,7 +34,7 @@ class TextWindow {
         this.dispObjGroup = this.scene.add.group();
         /** @type {Map<string, Guage>} ゲージのマップ */
         this.guageMap = new Map();
-        /** @type {Map<string, MenuItem>} メニューのマップ */
+        /** @type {Map<string, Phaser.GameObjects.Text>} メニューのマップ */
         this.menuMap = new Map();
         /** @type {Phaser.GameObjects.Container} ウインドウコンテナ */
         this.windowContainer = this.scene.add.container(this.x, this.y);
@@ -42,9 +42,11 @@ class TextWindow {
         /**
          * @type {Object} 追加パラメータ
          * @property {string} expl 説明
+         * @property {string} pressedKey 押されたキー
          */
         this.exParam = {
             expl: null,
+            pressedKey: null,
         };
     }
 
@@ -225,6 +227,10 @@ class TextWindow {
                 );
 
                 dispText.setInteractive();
+                // クリック時のアクションを設定
+                dispText.on("pointerdown", () => {
+                    this.exParam.pressedKey = content.KEY;
+                });
                 // ホバー時のアクションを設定
                 dispText.on("pointerover", () => {
                     this.exParam.expl = content.EXPL;

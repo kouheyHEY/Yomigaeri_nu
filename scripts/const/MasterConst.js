@@ -26,7 +26,7 @@ const C_MASTER = {
         },
         /** @type {MenuItem} 体力 */
         {
-            STRING: "体力：{}/{}",
+            STRING: "体力：{} / {}",
             KEY: "hp",
         },
         /** @type {MenuItem} 改行 */
@@ -43,7 +43,7 @@ const C_MASTER = {
         },
         /** @type {MenuItem} なつき度 */
         {
-            STRING: "なつき度：{}/{}",
+            STRING: "なつき度：{} / {}",
             KEY: "affection",
         },
         /** @type {MenuItem} 改行 */

@@ -106,6 +106,7 @@ const C_COMMON = {
         JARETSUKU: "jaretsuku",
         /** 筋トレ */
         TRAINING: "training",
+
         /** KOTARO */
         KOTARO: "kotaro",
         /** ワンクイズ王 */
@@ -114,5 +115,47 @@ const C_COMMON = {
         WANKORE: "wankore",
         /** 転生 */
         ASCENSION: "ascension"
+    },
+
+    /** 各パラメータのキー */
+    PARAM_KEY: {
+        /** 名前 */
+        NAME: "name",
+        /** 転生レベル */
+        ASCENSION_LEVEL: "ascensionLevel",
+        /** 体力 */
+        HP: "hp",
+        /** 体力最大値 */
+        HP_MAX: "hpMax",
+        /** なつき度 */
+        AFFECTION: "affection",
+        /** なつき度最大値 */
+        AFFECTION_MAX: "affectionMax",
+        /** 筋力 */
+        MUSCLE: "muscle",
+        /** 知力 */
+        INTELLIGENCE: "intelligence",
+        /** 魅力 */
+        CHARM: "charm",
+    },
+
+    /** アクションの効果量*/
+    ACTION_EFFECT_VAL: {
+        /** とてつもなく大きく増加 */
+        HUGE_INC: 16,
+        /** かなり大きく増加 */
+        LARGE_INC: 8,
+        /** 大きく増加 */
+        INC: 4,
+        /** 少し増加 */
+        SMALL_INC: 2,
+        /** 少し減少 */
+        SMALL_DEC: -2,
+        /** 減少 */
+        DEC: -4,
+        /** かなり減少 */
+        LARGE_DEC: -8,
+        /** とてつもなく減少 */
+        HUGE_DEC: -16,
     },
 };

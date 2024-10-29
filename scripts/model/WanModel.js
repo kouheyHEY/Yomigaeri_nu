@@ -27,12 +27,16 @@ class WanModel {
         this.charm = 0;
 
         // 潜在パラメータ
-        /** @type {Map<string, number>} 潜在パラメータ */
+        /** @type {Map<string, number>} 各アクションの実行回数 */
         this.actionNumMap = new Map();
         // 初期化
         for (const key in C_COMMON.ACTION_KEY) {
             this.actionNumMap.set(key, 0);
         }
+
+        // アクションの効果、後で反映
+        /** @type {Map<string, number>} 各アクションの効果 */
+        this.actionEffectMap = new Map();
     }
 
     /**
@@ -58,5 +62,42 @@ class WanModel {
             intelligence: this.intelligence,
             charm: this.charm,
         };
+    }
+
+    /**
+     * アクションの効果を設定する
+     * @param {Map<string, number>} actionEffectMap アクションの効果のマップ
+     */
+    setEffectByMap(actionEffectMap) {
+        if (this.actionEffectMap.size > 0) {
+            throw new Error("アクションの効果が既に設定されています。");
+        }
+        this.actionEffectMap = actionEffectMap;
+    }
+
+    /**
+     * アクションの効果を反映する
+     */
+    applyEffect() {
+        if (this.actionEffectMap.size === 0) {
+            throw new Error("アクションの効果が設定されていません。");
+        }
+
+        for (const key in this.actionEffectMap) {
+            this[key] += this.actionEffectMap.get(key);
+        }
+
+        this.actionEffectMap.clear();
+    }
+
+    /**
+     * アクションの実行回数をカウントする
+     * @param {string} key アクションのキー
+     */
+    countActionNum(key) {
+        if (!this.actionNumMap.has(key)) {
+            throw new Error(`アクションの実行回数が設定されていません。key: ${key}`);
+        }
+        this.actionNumMap.set(key, this.actionNumMap.get(key) + 1);
     }
 }

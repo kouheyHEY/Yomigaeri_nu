@@ -8,7 +8,6 @@ class IkuseiScene extends BaseScene {
     }
 
     initArea() {
-
         // 背景色を設定
         this.cameras.main.setBackgroundColor(C_COMMON.COMMON_COLOR_WHITE);
 
@@ -102,6 +101,25 @@ class IkuseiScene extends BaseScene {
         if (this.infoWindow.exParam.expl != null) {
             // メインウインドウの表示内容を更新
             this.mainWindow.updateMenu(C_MASTER.CONVERSATIONS.KEY, this.infoWindow.exParam.expl);
+        }
+
+        // 項目がクリックされている時
+        if (this.infoWindow.exParam.pressedKey != null) {
+            // アクションの効果量を取得
+            const actionEffectMap = ActionManager.getActionEffectMap(this.infoWindow.exParam.pressedKey);
+            // アクションの効果を設定
+            this.wanModel.setEffectByMap(actionEffectMap);
+            // メインウインドウの効果が反映されたパラメータの表示を、XX(+YY)の形式に変更
+            for (const [key, value] of actionEffectMap) {
+                const param = C_MASTER.PARAM_LIST.find(param => param.KEY === key);
+                const dispParam = this.wanModel.getDispParamObj();
+                // パラメータに数値をあてはめる
+                const paramStr = CommonUtil.formatString(param.STRING, [dispParam[key]]);
+                // パラメータの表示を更新
+                this.infoWindow.updateMenu(key, `${paramStr}(${value > 0 ? "+" : ""}${value})`);
+            }
+            // クリックされた項目をリセット
+            this.infoWindow.exParam.pressedKey = null;
         }
     }
 }

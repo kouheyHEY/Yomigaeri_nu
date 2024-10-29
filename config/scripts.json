@@ -23,6 +23,12 @@
             ]
         },
         {
+            "category": "マネージャークラス",
+            "files": [
+                "scripts/manager/ActionManager.js"
+            ]
+        },
+        {
             "category": "シーンクラス",
             "files": [
                 "scripts/scene/PreLoadScene.js",

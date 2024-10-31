@@ -29,6 +29,8 @@ const C_IS = {
             WIDTH: 320,
             /** ゲージの高さ */
             HEIGHT: 16,
+            /** ゲージのマージン */
+            MARGIN: 16,
             /** ゲージの枠の幅 */
             BORDER_WIDTH: 2,
             /** ゲージの枠の色 */
@@ -41,6 +43,8 @@ const C_IS = {
         affectionGauge: {
             /** ゲージの幅 */
             WIDTH: 320,
+            /** ゲージのマージン */
+            MARGIN: 16,
             /** ゲージの高さ */
             HEIGHT: 16,
             /** ゲージの枠の幅 */

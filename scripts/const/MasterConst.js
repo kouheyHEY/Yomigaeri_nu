@@ -26,36 +26,28 @@ const C_MASTER = {
         },
         /** @type {MenuItem} 体力 */
         {
-            STRING: "体力：{} / {}",
+            STRING: "体力：{}",
             KEY: "hp",
         },
-        /** @type {MenuItem} 改行 */
+        /** @type {MenuItem} なつき度 */
         {
-            KEY: "br",
+            STRING: "なつき度：{}",
+            KEY: "affection",
         },
         /** @type {MenuItem} 体力ゲージ */
         {
             TYPE: "gauge",
             VALUE: 0,
             VALUE_KEY: "hpRate",
-            COL: 2,
+            COL: 1,
             KEY: "hpGauge",
-        },
-        /** @type {MenuItem} なつき度 */
-        {
-            STRING: "なつき度：{} / {}",
-            KEY: "affection",
-        },
-        /** @type {MenuItem} 改行 */
-        {
-            KEY: "br",
         },
         /** @type {MenuItem} なつき度ゲージ */
         {
             TYPE: "gauge",
             VALUE: 0,
             VALUE_KEY: "affectionRate",
-            COL: 2,
+            COL: 1,
             KEY: "affectionGauge",
 
         },

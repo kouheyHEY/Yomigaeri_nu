@@ -32,7 +32,6 @@ class IkuseiScene extends BaseScene {
             // ゲージの場合
             if (param.TYPE === "gauge") {
                 param.VALUE = wanDispParamObj[param.VALUE_KEY];
-                param.COL = this.infoWindow.column;
             } else {
                 // 改行ではない場合
                 if (param.KEY !== "br") {

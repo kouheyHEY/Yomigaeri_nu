@@ -54,9 +54,9 @@ class WanModel {
         return {
             name: this.name,
             ascensionLevel: this.ascensionLevel,
-            hp: [this.hp, this.hpMax],
+            hp: this.hp,
             hpRate: this.hp / this.hpMax,
-            affection: [this.affection, this.affectionMax],
+            affection: this.affection,
             affectionRate: this.affection / this.affectionMax,
             muscle: this.muscle,
             intelligence: this.intelligence,

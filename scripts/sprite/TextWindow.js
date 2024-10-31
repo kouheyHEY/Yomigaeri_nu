@@ -193,9 +193,9 @@ class TextWindow {
                 continue;
             } else if (content.TYPE === "gauge") {
                 // ゲージの場合
-                const w = drawableWidth * content.COL / this.column;
+                const w = drawableWidth * content.COL / this.column - C_IS.GAUGE_PROPERTY[content.KEY].MARGIN;
                 const h = CommonUtil.convertPxToNumber(this.fontStyle.fontSize);
-                x = (drawableWidth - w) / 2;
+                x = (drawableWidth / this.column) * (i % this.column) + (drawableWidth / this.column - w) / 2;
                 y = (h + C_COMMON.WINDOW_PADDING_LINE_SMALL) * Math.floor(i / this.column);
 
                 // ゲージを描画

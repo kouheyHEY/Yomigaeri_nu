@@ -28,7 +28,8 @@ class IkuseiScene extends BaseScene {
 
         // ウインドウに表示するパラメータを追加
         const wanDispParamObj = this.wanModel.getDispParamObj();
-        for (const param of C_MASTER.PARAM_LIST) {
+        for (const paramMaster of C_MASTER.PARAM_LIST) {
+            const param = { ...paramMaster };
             // ゲージの場合
             if (param.TYPE === "gauge") {
                 param.VALUE = wanDispParamObj[param.VALUE_KEY];
@@ -61,7 +62,8 @@ class IkuseiScene extends BaseScene {
         }
 
         // ウインドウに表示するメニュー内容を追加
-        for (const menu of C_MASTER.MENU_LIST) {
+        for (const menuMaster of C_MASTER.MENU_LIST) {
+            const menu = { ...menuMaster };
             this.infoWindow.addDispContent(
                 menu.KEY,
                 menu
@@ -106,16 +108,24 @@ class IkuseiScene extends BaseScene {
         if (this.infoWindow.exParam.pressedKey != null) {
             // アクションの効果量を取得
             const actionEffectMap = ActionManager.getActionEffectMap(this.infoWindow.exParam.pressedKey);
-            // アクションの効果を設定
+            // アクションの効果を設定、反映
             this.wanModel.setEffectByMap(actionEffectMap);
+            this.wanModel.applyEffect();
+            // 表示用パラメータを取得
+            const dispParam = this.wanModel.getDispParamObj();
             // メインウインドウの効果が反映されたパラメータの表示を、XX(+YY)の形式に変更
             for (const [key, value] of actionEffectMap) {
-                const param = C_MASTER.PARAM_LIST.find(param => param.KEY === key);
-                const dispParam = this.wanModel.getDispParamObj();
+                const paramMaster = C_MASTER.PARAM_LIST.find(param => param.KEY === key);
+                const param = ObjectUtil.deepCopy(paramMaster);
                 // パラメータに数値をあてはめる
                 const paramStr = CommonUtil.formatString(param.STRING, [dispParam[key]]);
                 // パラメータの表示を更新
                 this.infoWindow.updateMenu(key, `${paramStr}(${value > 0 ? "+" : ""}${value})`);
+
+                // hp, なつき度ゲージの場合は、ゲージの表示を更新
+                if (key === C_COMMON.PARAM_KEY.HP || key === C_COMMON.PARAM_KEY.AFFECTION) {
+                    this.infoWindow.updateGuage(key + "Gauge", dispParam[key + "Rate"]);
+                }
             }
             // クリックされた項目をリセット
             this.infoWindow.exParam.pressedKey = null;

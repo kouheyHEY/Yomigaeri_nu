@@ -22,6 +22,19 @@ const C_IS = {
     /** メイン用テキストウインドウの列数 */
     WINDOW_TEXT_MAIN_COLUMN: 2,
 
+    /** 各パラメータの初期値 */
+    PARAM_INIT_VALUE: {
+        name: "ワン丸",
+        ascensionLevel: 0,
+        hp: 50,
+        hpMax: 100,
+        affection: 50,
+        affectionMax: 100,
+        muscle: 10,
+        intelligence: 10,
+        charm: 10,
+    },
+
     /** ゲージのプロパティ */
     GAUGE_PROPERTY: {
         hpGauge: {

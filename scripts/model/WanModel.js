@@ -8,23 +8,23 @@ class WanModel {
     constructor() {
         // パラメータ
         /** @type {string} 名前 */
-        this.name = "デフォルト";
+        this.name = C_IS.PARAM_INIT_VALUE.name;
         /** @type {number} 転生レベル */
-        this.ascensionLevel = 0;
+        this.ascensionLevel = C_IS.PARAM_INIT_VALUE.ascensionLevel;
         /** @type {number} 体力 */
-        this.hp = 2;
+        this.hp = C_IS.PARAM_INIT_VALUE.hp;
         /** @type {number} 体力最大値 */
-        this.hpMax = 3;
+        this.hpMax = C_IS.PARAM_INIT_VALUE.hpMax;
         /** @type {number} なつき度 */
-        this.affection = 2;
+        this.affection = C_IS.PARAM_INIT_VALUE.affection;
         /** @type {number} なつき度最大値 */
-        this.affectionMax = 3;
+        this.affectionMax = C_IS.PARAM_INIT_VALUE.affectionMax;
         /** @type {number} 筋力 */
-        this.muscle = 0;
+        this.muscle = C_IS.PARAM_INIT_VALUE.muscle;
         /** @type {number} 知力 */
-        this.intelligence = 0;
+        this.intelligence = C_IS.PARAM_INIT_VALUE.intelligence;
         /** @type {number} 魅力 */
-        this.charm = 0;
+        this.charm = C_IS.PARAM_INIT_VALUE.charm;
 
         // 潜在パラメータ
         /** @type {Map<string, number>} 各アクションの実行回数 */
@@ -70,7 +70,7 @@ class WanModel {
      */
     setEffectByMap(actionEffectMap) {
         if (this.actionEffectMap.size > 0) {
-            throw new Error("アクションの効果が既に設定されています。");
+            this.actionEffectMap.clear();
         }
         this.actionEffectMap = actionEffectMap;
     }
@@ -83,11 +83,21 @@ class WanModel {
             throw new Error("アクションの効果が設定されていません。");
         }
 
-        for (const key in this.actionEffectMap) {
-            this[key] += this.actionEffectMap.get(key);
-        }
+        for (const [key, value] of this.actionEffectMap) {
+            if (this[key] === undefined) {
+                throw new Error(`パラメータが設定されていません。key: ${key}`);
+            }
 
-        this.actionEffectMap.clear();
+            if (key === C_COMMON.PARAM_KEY.HP || key === C_COMMON.PARAM_KEY.AFFECTION) {
+                // hp, なつき度は最大値を超えない
+                this[key] = Math.min(this[key] + value, this[`${key}Max`]);
+            } else {
+                // その他はそのまま
+                this[key] += value;
+            }
+            // 0未満になることはない
+            this[key] = Math.max(this[key], 0);
+        }
     }
 
     /**

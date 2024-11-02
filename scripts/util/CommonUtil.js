@@ -43,6 +43,7 @@ class CommonUtil {
      */
     static formatString(str, list) {
         let index = 0;
+        // {}を値に置き換える
         return str.replace(/\{\}/g, () => list[index++] ?? '');
     }
 }

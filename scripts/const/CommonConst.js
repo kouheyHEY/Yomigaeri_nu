@@ -158,4 +158,9 @@ const C_COMMON = {
         /** とてつもなく減少 */
         HUGE_DEC: -16,
     },
+
+    /** アクション結果の数値変動の変動量下限 */
+    ACTION_RESULT_VAL_MIN: -3,
+    /** アクション結果の数値変動の変動量上限 */
+    ACTION_RESULT_VAL_MAX: 3,
 };

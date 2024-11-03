@@ -115,6 +115,11 @@ class IkuseiScene extends BaseScene {
             const dispParam = this.wanModel.getDispParamObj();
             // メインウインドウの効果が反映されたパラメータの表示を、XX(+YY)の形式に変更
             for (const [key, value] of actionEffectMap) {
+                // 変動量が0の場合は、表示しない
+                if (value === 0) {
+                    continue;
+                }
+
                 const paramMaster = C_MASTER.PARAM_LIST.find(param => param.KEY === key);
                 const param = ObjectUtil.deepCopy(paramMaster);
                 // パラメータに数値をあてはめる

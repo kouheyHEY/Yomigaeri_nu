@@ -115,17 +115,18 @@ class IkuseiScene extends BaseScene {
             const dispParam = this.wanModel.getDispParamObj();
             // メインウインドウの効果が反映されたパラメータの表示を、XX(+YY)の形式に変更
             for (const [key, value] of actionEffectMap) {
-                // 変動量が0の場合は、表示しない
-                if (value === 0) {
-                    continue;
-                }
-
+                // パラメータのマスタを取得
                 const paramMaster = C_MASTER.PARAM_LIST.find(param => param.KEY === key);
                 const param = ObjectUtil.deepCopy(paramMaster);
                 // パラメータに数値をあてはめる
-                const paramStr = CommonUtil.formatString(param.STRING, [dispParam[key]]);
+                let paramStr = CommonUtil.formatString(param.STRING, [dispParam[key]]);
+                // 変動量が0の場合はかっこを表示しない
+                if (value != 0) {
+                    paramStr = `${paramStr}(${value > 0 ? "+" : ""}${value})`;
+                }
+
                 // パラメータの表示を更新
-                this.infoWindow.updateMenu(key, `${paramStr}(${value > 0 ? "+" : ""}${value})`);
+                this.infoWindow.updateMenu(key, paramStr);
 
                 // hp, なつき度ゲージの場合は、ゲージの表示を更新
                 if (key === C_COMMON.PARAM_KEY.HP || key === C_COMMON.PARAM_KEY.AFFECTION) {
